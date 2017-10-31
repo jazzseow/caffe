@@ -33,14 +33,12 @@ layer {
     }
   }
 }
-
 layer {
   name: "conv0/relu"
   type: "ReLU"
   bottom: "conv0"
   top: "conv0"
 }
-
 layer {
   name: "conv1/dw"
   type: "Convolution"
@@ -69,14 +67,12 @@ layer {
     }
   }
 }
-
 layer {
   name: "conv1/dw/relu"
   type: "ReLU"
   bottom: "conv1/dw"
   top: "conv1/dw"
 }
-
 layer {
   name: "conv1"
   type: "Convolution"
@@ -102,14 +98,12 @@ layer {
     }
   }
 }
-
 layer {
   name: "conv1/relu"
   type: "ReLU"
   bottom: "conv1"
   top: "conv1"
 }
-
 layer {
   name: "conv2/dw"
   type: "Convolution"
@@ -139,7 +133,6 @@ layer {
     }
   }
 }
-
 layer {
   name: "conv2/dw/relu"
   type: "ReLU"

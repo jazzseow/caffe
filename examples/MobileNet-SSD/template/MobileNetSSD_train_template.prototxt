@@ -46,7 +46,7 @@ layer {
     }
   }
   data_param {
-    source: "/home/jazz/SSD/caffe/data/VOCdevkit/VOC0712/lmdb/VOC0712_test_lmdb/"
+    source: "trainval_lmdb/"
     batch_size: 24
     backend: LMDB
   }
@@ -133,7 +133,7 @@ layer {
       max_sample: 1
       max_trials: 50
     }
-    label_map_file: "/home/jazz/SSD/caffe/data/VOC0712/labelmap_voc.prototxt"
+    label_map_file: "labelmap.prototxt"
   }
 }
 layer {

@@ -16,7 +16,7 @@ using caffe::Net;
 class Quantization {
 public:
   explicit Quantization(string model, string weights, string model_quantized,
-      int iterations, string trimming_mode, double error_margin, string gpus);
+      int iterations, string trimming_mode, double error_margin, string gpus, bool detection);
   void QuantizeNet();
 private:
   void CheckWritePermissions(const string path);
@@ -32,7 +32,7 @@ private:
    * appropriate value. For example, for BVLC GoogLeNet, use score_number=7.
    */
   void RunForwardBatches(const int iterations, Net<float>* caffe_net,
-      float* accuracy, const bool do_stats = false, const int score_number = 0);
+      float* accuracy, bool detection, const bool do_stats = false, const int score_number = 0);
   /**
    * @brief Quantize convolutional and fully connected layers to dynamic fixed
    * point.
@@ -101,6 +101,7 @@ private:
   double error_margin_;
   string gpus_;
   float test_score_baseline_;
+  bool detection_;
   // The maximal absolute values of layer inputs, parameters and
   // layer outputs.
   vector<float> max_in_, max_params_, max_out_;

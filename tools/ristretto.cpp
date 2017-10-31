@@ -32,6 +32,9 @@ DEFINE_string(trimming_mode, "",
     "integer_power_of_2_weights.");
 DEFINE_string(model_quantized, "",
     "The output path of the quantized net");
+DEFINE_bool(detection, false,
+    "Optional; Enables detection for testing. "
+    "By default it is false and classification is on.");
 DEFINE_string(gpu, "",
     "Optional: Run in GPU mode on given device ID.");
 DEFINE_int32(iterations, 50,
@@ -84,7 +87,7 @@ int quantize(){
   CHECK_GT(FLAGS_trimming_mode.size(), 0) << "Need trimming mode.";
   Quantization* q = new Quantization(FLAGS_model, FLAGS_weights,
       FLAGS_model_quantized, FLAGS_iterations, FLAGS_trimming_mode,
-      FLAGS_error_margin, FLAGS_gpu);
+      FLAGS_error_margin, FLAGS_gpu, FLAGS_detection);
   q->QuantizeNet();
   delete q;
   return 0;

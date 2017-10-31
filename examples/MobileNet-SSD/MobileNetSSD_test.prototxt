@@ -21,14 +21,14 @@ layer {
     }
   }
   data_param {
-    source: "/home/jazz/SSD/caffe/data/VOCdevkit/VOC0712/lmdb/VOC0712_test_lmdb/"
+    source: "examples/VOC0712/VOC0712_test_lmdb"
     batch_size: 8
     backend: LMDB
   }
   annotated_data_param {
     batch_sampler {
     }
-    label_map_file: "/home/jazz/SSD/caffe/data/VOC0712/labelmap_voc.prototxt"
+    label_map_file: "data/VOC0712/labelmap_voc.prototxt"
   }
 }
 layer {
