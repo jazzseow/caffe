@@ -274,14 +274,10 @@ int test_detection(Net<float>& caffe_net) {
     for (int j = 0; j < result.size(); ++j) {
       const float* result_vec = result[j]->cpu_data();
       int num_det = result[j]->height();
-      LOG(INFO)<<"num_det: "<<num_det;
 
       for (int k = 0; k < num_det; ++k) {
-        LOG(INFO)<<"k: "<<k;
         int item_id = static_cast<int>(result_vec[k * 5]);
-        LOG(INFO)<<"item_id: "<<item_id;
         int label = static_cast<int>(result_vec[k * 5 + 1]);
-        LOG(INFO)<<"label: "<<label;
         if (item_id == -1) {
           // Special row of storing number of positives for a label.
           if (all_num_pos[j].find(label) == all_num_pos[j].end()) {
