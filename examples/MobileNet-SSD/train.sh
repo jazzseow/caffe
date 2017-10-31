@@ -1,5 +1,5 @@
 #!/bin/sh
-if ! test -f example/MobileNetSSD_train.prototxt ;then
+if ! test -f examples/MobileNet-SSD/MobileNetSSD_train.prototxt ;then
 	echo "error: example/MobileNetSSD_train.prototxt does not exist."
 	echo "please use the gen_model.sh to generate your own model."
         exit 1

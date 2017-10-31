@@ -1,0 +1,5 @@
+#!/bin/sh
+build/tools/caffe train -solver examples/MobileNet-SSD/solver_test.prototxt \
+-weightsexamples/MobileNet-SSD/ mobilenet_iter_73000.caffemodel \
+-gpu 0,1,2,3
+#../../build/tools/caffe test -model MobileNetSSD_train_test.prototxt -weights mobilenet_iter_73000.caffemodel -gpu 0 -iterations 100
