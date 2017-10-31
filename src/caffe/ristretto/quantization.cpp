@@ -36,6 +36,7 @@ void Quantization::QuantizeNet() {
   Net<float>* net_val = new Net<float>(model_, caffe::TEST);
   net_val->CopyTrainedLayersFrom(weights_);
   float accuracy;
+  LOG(INFO);
   RunForwardBatches(this->iterations_, net_val, &accuracy, this->detection_);
   test_score_baseline_ = accuracy;
   delete net_val;
@@ -43,8 +44,10 @@ void Quantization::QuantizeNet() {
   // values. Do statistic for 10 batches.
   Net<float>* net_test = new Net<float>(model_, caffe::TRAIN);
   net_test->CopyTrainedLayersFrom(weights_);
+  LOG(INFO);
   RunForwardBatches(10, net_test, &accuracy, this->detection_, true);
   delete net_test;
+  LOG(INFO);
   // Do network quantization and scoring.
   if (trimming_mode_ == "dynamic_fixed_point") {
     Quantize2DynamicFixedPoint();
@@ -163,6 +166,7 @@ void Quantization::RunForwardBatches(const int iterations,
       std::vector<std::pair<float, int> > > > all_false_pos;
     std::map<int, std::map<int, int> > all_num_pos;
 
+    LOG(INFO);
     for (int i = 0; i < iterations; ++i) {
       float iter_loss;
       const vector<Blob<float>*>& result = caffe_net->Forward(&iter_loss);
@@ -170,14 +174,9 @@ void Quantization::RunForwardBatches(const int iterations,
       for (int j = 0; j < result.size(); ++j) {
         const float* result_vec = result[j]->cpu_data();
         int num_det = result[j]->height();
-        LOG(INFO)<<"num_det: "<<num_det;
-
         for (int k = 0; k < num_det; ++k) {
-          LOG(INFO)<<"k: "<<k;
           int item_id = static_cast<int>(result_vec[k * 5]);
-          LOG(INFO)<<"item_id: "<<item_id;
           int label = static_cast<int>(result_vec[k * 5 + 1]);
-          LOG(INFO)<<"label: "<<label;
           if (item_id == -1) {
             // Special row of storing number of positives for a label.
             if (all_num_pos[j].find(label) == all_num_pos[j].end()) {
@@ -201,7 +200,7 @@ void Quantization::RunForwardBatches(const int iterations,
         }
       }
     }
-
+    LOG(INFO);
     for (int i = 0; i < all_true_pos.size(); ++i) {
       if (all_true_pos.find(i) == all_true_pos.end()) {
         LOG(FATAL) << "Missing output_blob true_pos: " << i;
@@ -241,6 +240,7 @@ void Quantization::RunForwardBatches(const int iterations,
                   "11point", &prec, &rec, &(APs[label]));
         mAP += APs[label];
       }
+
       mAP /= num_pos.size();
       LOG(INFO) << num_pos.size();
       const int output_blob_index = caffe_net->output_blob_indices()[i];
@@ -285,7 +285,9 @@ void Quantization::Quantize2DynamicFixedPoint() {
         bitwidth, -1, -1, -1);
     net_test = new Net<float>(param, NULL);
     net_test->CopyTrainedLayersFrom(weights_);
+    LOG(INFO);
     RunForwardBatches(iterations_, net_test, &accuracy, this->detection_);
+    LOG(INFO);
     test_bw_conv_params.push_back(bitwidth);
     test_scores_conv_params.push_back(accuracy);
     delete net_test;
