@@ -1,16 +1,41 @@
-import cv2
+import numpy as np
+import matplotlib.pyplot as plt
 
+# Make sure that caffe is on the python path:
+caffe_root = '../../'  # this file is expected to be in {caffe_root}/examples
+import sys
+sys.path.insert(0, caffe_root + 'python')
 
-imgfile = 'images/000001.jpg'
+import caffe
 
-img_mat = cv2.imread(imgfile)
-imgcp = cv2.resize(img_mat,(3,5))
+caffe.set_mode_cpu()
 
-print "original \n",imgcp
+# Load the original network and extract the fully connected layers' parameters.
+net1 = caffe.Net('MobileNetSSD_deploy.prototxt',
+                'MobileNetSSD_deploy.caffemodel',
+                caffe.TEST)
 
-print "-100 \n",imgcp.transpose((2, 0, 1))
+# net2 = caffe.Net('lenet.prototxt',
+#                 'zero.caffemodel',
+#                 caffe.TEST)
+# for each layer, show the output shape
+for layer_name, blob in net1.blobs.iteritems():
+    print layer_name + '\t' + str(blob.data.shape)
 
-# cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-# cv2.imshow('image',imgcp)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
+#accuracy = 0.9909
+#I1026 14:38:56.076452  6765 caffe.cpp:330] loss = 0.0289774 (* 1 = 0.0289774 loss)
+# 
+# w1 = net1.params['conv2'][0]
+# b1 = net1.params['conv2'][1]
+# # w2 = net2.params['conv2'][0]
+# # b2 = net2.params['conv2'][1]
+# # print np.histogram(np.absolute(w),bins = 1000)[0][:50]
+# # print np.histogram(np.absolute(w),bins = 1000)[1][:50]
+# # print np.histogram(np.absolute(w),bins = 1000)[1][1]
+#
+# w1.data[ w1.data < np.histogram(np.absolute(w1.data),bins = 1000)[1][1]] = 0
+# # b.data[...] = 0
+# # print b1.data
+# # print '|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||'
+# # print b2.data
+# net1.save('zero.caffemodel')

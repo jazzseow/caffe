@@ -6,4 +6,5 @@ if ! test -f MobileNetSSD_train.prototxt ;then
 fi
 mkdir -p snapshot
 ../../build/tools/caffe train -solver="solver_train.prototxt" \
--weights="mobilenet_iter_73000.caffemodel" 
+-weights="mobilenet_iter_73000.caffemodel"
+-gpu 0
