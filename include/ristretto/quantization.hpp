@@ -15,7 +15,7 @@ using caffe::Net;
  */
 class Quantization {
 public:
-  explicit Quantization(string train_model, string test_model, string weights, string model_quantized,
+  explicit Quantization(string model, string weights, string model_quantized,
       int iterations, string trimming_mode, double error_margin, string gpus, bool detection);
   void QuantizeNet();
 private:
@@ -93,8 +93,7 @@ private:
    */
   int GetIntegerLengthOut(const string layer_name);
 
-  string train_model_;
-  string test_model_;
+  string model_;
   string weights_;
   string model_quantized_;
   int iterations_;
