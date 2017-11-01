@@ -8,8 +8,9 @@
 # 	--error_margin=3 --detection
 
 sudo ./build/tools/ristretto quantize \
-	--model=examples/mnist/lenet_train_test.prototxt \
-	--weights=examples/mnist/lenet_iter_10000.caffemodel \
-	--model_quantized=examples/mnist/lenet_quantized.prototxt \
-	--trimming_mode=dynamic_fixed_point -gpu 0 --iterations=10 \
-	--error_margin=3
+	--train_model=models/VGGNet/VOC0712/SSD_300x300_ft/train.prototxt \
+	--test_model=models/VGGNet/VOC0712/SSD_300x300_ft/test.prototxt \
+	--weights=models/VGGNet/VOC0712/SSD_300x300_ft/VGG_VOC0712_SSD_300x300_ft_iter_120000.caffemodel \
+	--model_quantized=examples/MobileNet-SSD/MSSD_quantized.prototxt \
+	--trimming_mode=dynamic_fixed_point --gpu="0,1,2,3" --iterations=10 \
+	--error_margin=3 --detection

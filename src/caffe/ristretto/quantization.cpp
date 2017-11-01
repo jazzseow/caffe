@@ -164,11 +164,11 @@ void Quantization::RunForwardBatches(const int iterations,
   }
   else{
     if(do_stats) {
-      for (int i = 0; i < iterations; ++i) {
-        caffe_net->Forward();
-        caffe_net->RangeInLayers(&layer_names_, &max_in_, &max_out_,
+      LOG(INFO)<<"start";
+      caffe_net->Forward();
+      LOG(INFO)<<"end";
+      caffe_net->RangeInLayers(&layer_names_, &max_in_, &max_out_,
                                  &max_params_);
-      }
       return;
     }
     std::map<int, std::map<int,
