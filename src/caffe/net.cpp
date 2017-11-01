@@ -411,9 +411,12 @@ void Net<Dtype>::RangeInLayers(vector<string>* layer_name,
   for (int layer_id = 0; layer_id < layers_.size(); ++layer_id) {
     if (strcmp(layers_[layer_id]->type(), "Convolution") == 0 ||
           strcmp(layers_[layer_id]->type(), "InnerProduct") == 0) {
+      LOG(INFO)<<"layer id: "<<layer_id;
+      LOG(INFO)<<bottom_vecs_[layer_id][0];
       max_val = findMax(bottom_vecs_[layer_id][0]);
       max_in->at(index) = std::max(max_in->at(index), max_val);
       max_val = findMax(top_vecs_[layer_id][0]);
+      LOG(INFO)<<top_vecs_[layer_id][0];
       max_out->at(index) = std::max(max_out->at(index), max_val);
       // Consider the weights only, ignore the bias
       max_val = findMax(&(*layers_[layer_id]->blobs()[0]));

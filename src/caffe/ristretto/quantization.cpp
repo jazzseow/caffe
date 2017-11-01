@@ -12,9 +12,10 @@ using caffe::Blob;
 using caffe::LayerParameter;
 using caffe::NetParameter;
 
-Quantization::Quantization(string model, string weights, string model_quantized,
+Quantization::Quantization(string train_model, string test_model, string weights, string model_quantized,
       int iterations, string trimming_mode, double error_margin, string gpus, bool detection) {
-  this->model_ = model;
+  this->train_model_ = train_model;
+  this->test_model_ = test_model;
   this->weights_ = weights;
   this->model_quantized_ = model_quantized;
   this->iterations_ = iterations;
@@ -33,7 +34,7 @@ void Quantization::QuantizeNet() {
   SetGpu();
   // Run the reference floating point network on validation set to find baseline
   // accuracy.
-  Net<float>* net_val = new Net<float>(model_, caffe::TEST);
+  Net<float>* net_val = new Net<float>(test_model_, caffe::TEST);
   net_val->CopyTrainedLayersFrom(weights_);
   float accuracy;
   LOG(INFO);
@@ -42,10 +43,12 @@ void Quantization::QuantizeNet() {
   delete net_val;
   // Run the reference floating point network on train data set to find maximum
   // values. Do statistic for 10 batches.
-  Net<float>* net_test = new Net<float>(model_, caffe::TRAIN);
+  Net<float>* net_test = new Net<float>(train_model_, caffe::TRAIN);
   net_test->CopyTrainedLayersFrom(weights_);
   LOG(INFO);
   RunForwardBatches(10, net_test, &accuracy, this->detection_, true);
+  LOG(INFO)<<"accuracy: "<<accuracy;
+  LOG(INFO)<<"test_score_baseline_: "<<test_score_baseline_;
   delete net_test;
   LOG(INFO);
   // Do network quantization and scoring.
@@ -160,6 +163,14 @@ void Quantization::RunForwardBatches(const int iterations,
     *accuracy = test_score[score_number] / iterations;
   }
   else{
+    if(do_stats) {
+      for (int i = 0; i < iterations; ++i) {
+        caffe_net->Forward();
+        caffe_net->RangeInLayers(&layer_names_, &max_in_, &max_out_,
+                                 &max_params_);
+      }
+      return;
+    }
     std::map<int, std::map<int,
       std::vector<std::pair<float, int> > > > all_true_pos;
     std::map<int, std::map<int,
@@ -262,6 +273,10 @@ void Quantization::Quantize2DynamicFixedPoint() {
     il_in_.push_back((int)ceil(log2(max_in_[i])));
     il_out_.push_back((int)ceil(log2(max_out_[i])));
     il_params_.push_back((int)ceil(log2(max_params_[i])+1));
+    LOG(INFO) << "Layer " << layer_names_[i];
+    LOG(INFO) << "max_in_: " <<max_in_[i];
+    LOG(INFO) << "max_out_: " <<max_out_[i];
+    LOG(INFO) << "max_params_: " <<max_params_[i];
   }
   // Debug
   for (int k = 0; k < layer_names_.size(); ++k) {
@@ -274,7 +289,7 @@ void Quantization::Quantize2DynamicFixedPoint() {
   // Score net with dynamic fixed point convolution parameters.
   // The rest of the net remains in high precision format.
   NetParameter param;
-  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+  caffe::ReadNetParamsFromTextFileOrDie(test_model_, &param);
   param.mutable_state()->set_phase(caffe::TEST);
   vector<int> test_bw_conv_params;
   vector<float> test_scores_conv_params;
@@ -296,7 +311,7 @@ void Quantization::Quantize2DynamicFixedPoint() {
 
   // Score net with dynamic fixed point inner product parameters.
   // The rest of the net remains in high precision format.
-  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+  caffe::ReadNetParamsFromTextFileOrDie(test_model_, &param);
   param.mutable_state()->set_phase(caffe::TEST);
   vector<int> test_bw_fc_params;
   vector<float> test_scores_fc_params;
@@ -314,7 +329,7 @@ void Quantization::Quantize2DynamicFixedPoint() {
 
   // Score net with dynamic fixed point layer activations.
   // The rest of the net remains in high precision format.
-  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+  caffe::ReadNetParamsFromTextFileOrDie(test_model_, &param);
   param.mutable_state()->set_phase(caffe::TEST);
   vector<int> test_bw_layer_activations;
   vector<float> test_scores_layer_activations;
@@ -360,7 +375,7 @@ void Quantization::Quantize2DynamicFixedPoint() {
   // Score dynamic fixed point network.
   // This network combines dynamic fixed point parameters in convolutional and
   // inner product layers, as well as dynamic fixed point activations.
-  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+  caffe::ReadNetParamsFromTextFileOrDie(test_model_, &param);
   param.mutable_state()->set_phase(caffe::TEST);
   EditNetDescriptionDynamicFixedPoint(&param, "Convolution_and_InnerProduct",
       "Parameters_and_Activations", bw_conv_params_, bw_fc_params_, bw_in_,
@@ -417,7 +432,7 @@ void Quantization::Quantize2MiniFloat() {
 
   // Score net with minifloat parameters and activations.
   NetParameter param;
-  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+  caffe::ReadNetParamsFromTextFileOrDie(test_model_, &param);
   param.mutable_state()->set_phase(caffe::TEST);
   vector<int> test_bitwidth;
   vector<float> test_scores;
@@ -445,7 +460,7 @@ void Quantization::Quantize2MiniFloat() {
   }
 
   // Write prototxt file of net with best bitwidth
-  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+  caffe::ReadNetParamsFromTextFileOrDie(test_model_, &param);
   EditNetDescriptionMiniFloat(&param, best_bitwidth);
   WriteProtoToTextFile(param, model_quantized_);
 
@@ -474,7 +489,7 @@ void Quantization::Quantize2IntegerPowerOf2Weights() {
   // Score net with integer-power-of-two weights and dynamic fixed point
   // activations.
   NetParameter param;
-  caffe::ReadNetParamsFromTextFileOrDie(model_, &param);
+  caffe::ReadNetParamsFromTextFileOrDie(test_model_, &param);
   param.mutable_state()->set_phase(caffe::TEST);
   float accuracy;
   Net<float>* net_test;
