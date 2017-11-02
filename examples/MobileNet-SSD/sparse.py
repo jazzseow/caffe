@@ -11,9 +11,9 @@ import caffe
 caffe.set_mode_cpu()
 
 # Load the original network and extract the fully connected layers' parameters.
-net1 = caffe.Net('examples/MobileNet-SSD/MobileNetSSD_trainval.prototxt',
-                'examples/MobileNet-SSD/mobilenet_iter_1000.caffemodel',
-                caffe.TEST)
+net1 = caffe.Net('examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.prototxt',
+                 'examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.caffemodel',
+                  caffe.TEST)
 
 # net2 = caffe.Net('lenet.prototxt',
 #                 'zero.caffemodel',
@@ -21,7 +21,7 @@ net1 = caffe.Net('examples/MobileNet-SSD/MobileNetSSD_trainval.prototxt',
 # for each layer, show the output shape
 
 for k, v in net1.params.items():
-    print k," ",v.data
+    print k," ",v[0].data.shape
 
 
 #accuracy = 0.9909

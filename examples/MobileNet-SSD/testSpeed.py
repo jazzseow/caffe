@@ -28,8 +28,6 @@ CLASSES = ('background',
            'motorbike', 'person', 'pottedplant',
            'sheep', 'sofa', 'train', 'tvmonitor')
 
-mean_per_iter = []
-alltime = []
 
 def preprocess(src):
     img = cv2.resize(src, (300,300))
@@ -79,17 +77,15 @@ def detect(imgfile):
     # if k == 27 : return False
     # return True
 
-for i in range(100):
-    meanlist = []
-    for f in os.listdir(test_dir):
-        tt = detect(test_dir + "/" + f)
-        meanlist.append(tt)
-    alltime = alltime + meanlist
-    mean_per_iter.append(np.mean(meanlist))
+meanlist = []
+for f in os.listdir(test_dir):
+    tt = detect(test_dir + "/" + f)
+    meanlist.append(tt)
+
 
 # plt.hist(np.hstack((x for x in mean_per_iter)), bins='auto')
-plt.hist(alltime, bins='auto')
+plt.hist(meanlist, bins='auto')
 plt.xlabel('Time(ms)')
 plt.ylabel('Number of Image')
-plt.title('Mean time : %.2f' % np.mean(mean_per_iter))
-plt.savefig('foo.png', dpi=256)
+plt.title('Mean time : %.2f' % np.mean(meanlist))
+plt.savefig('log/model_1000_time.png', dpi=256)
