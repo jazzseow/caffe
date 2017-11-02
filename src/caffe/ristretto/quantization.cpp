@@ -171,7 +171,6 @@ void Quantization::RunForwardBatches(const int iterations,
       std::vector<std::pair<float, int> > > > all_false_pos;
     std::map<int, std::map<int, int> > all_num_pos;
 
-    LOG(INFO);
     for (int i = 0; i < iterations; ++i) {
       float iter_loss;
       const vector<Blob<float>*>& result = caffe_net->Forward(&iter_loss);
@@ -205,7 +204,6 @@ void Quantization::RunForwardBatches(const int iterations,
         }
       }
     }
-    LOG(INFO);
     for (int i = 0; i < all_true_pos.size(); ++i) {
       if (all_true_pos.find(i) == all_true_pos.end()) {
         LOG(FATAL) << "Missing output_blob true_pos: " << i;
@@ -247,7 +245,6 @@ void Quantization::RunForwardBatches(const int iterations,
       }
 
       mAP /= num_pos.size();
-      LOG(INFO) << num_pos.size();
       const int output_blob_index = caffe_net->output_blob_indices()[i];
       const string& output_name = caffe_net->blob_names()[output_blob_index];
       LOG(INFO) << "    Test net output #" << i << ": " << output_name << " = "
@@ -539,6 +536,8 @@ void Quantization::EditNetDescriptionDynamicFixedPoint(NetParameter* param,
     if (layers_2_quantize.find("InnerProduct") != string::npos &&
         (param->layer(i).type().find("InnerProduct") != string::npos ||
         param->layer(i).type().find("FcRistretto") != string::npos)) {
+
+      LOG(INFO)<<"InnerProduct layer Found";
       // quantize parameters
       if (net_part.find("Parameters") != string::npos) {
         LayerParameter* param_layer = param->mutable_layer(i);

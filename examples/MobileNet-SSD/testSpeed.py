@@ -1,19 +1,24 @@
 import numpy as np
 import sys,os
 import cv2
+import datetime
 caffe_root = '/home/jazzseow/ssd/'
 sys.path.insert(0, caffe_root + 'python')
 import caffe
+import matplotlib.pyplot as plt
 
 
-net_file= 'MobileNetSSD_deploy.prototxt'
-caffe_model='MobileNetSSD_deploy.caffemodel'
-test_dir = "images"
+net_file= 'examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.prototxt'
+caffe_model='examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.caffemodel'
+# test_dir = "examples/MobileNet-SSD/images"
+test_dir = "data/VOCdevkit/VOC2007/JPEGImages"
 
 if not os.path.exists(caffe_model):
     print("MobileNetSSD_deploy.affemodel does not exist,")
     print("use merge_bn.py to generate it.")
     exit()
+
+caffe.set_mode_cpu();
 net = caffe.Net(net_file,caffe_model,caffe.TEST)
 
 CLASSES = ('background',
@@ -23,6 +28,8 @@ CLASSES = ('background',
            'motorbike', 'person', 'pottedplant',
            'sheep', 'sofa', 'train', 'tvmonitor')
 
+mean_per_iter = []
+alltime = []
 
 def preprocess(src):
     img = cv2.resize(src, (300,300))
@@ -40,6 +47,8 @@ def postprocess(img, out):
     return (box.astype(np.int32), conf, cls)
 
 def detect(imgfile):
+    a = datetime.datetime.now()
+
     origimg = cv2.imread(imgfile)
     img = preprocess(origimg)
 
@@ -50,20 +59,37 @@ def detect(imgfile):
     out = net.forward()
     box, conf, cls = postprocess(origimg, out)
 
-    for i in range(len(box)):
-       p1 = (box[i][0], box[i][1])
-       p2 = (box[i][2], box[i][3])
-       cv2.rectangle(origimg, p1, p2, (0,255,0))
-       p3 = (max(p1[0], 15), max(p1[1], 15))
-       title = "%s:%.2f" % (CLASSES[int(cls[i])], conf[i])
-       cv2.putText(origimg, title, p3, cv2.FONT_ITALIC, 0.6, (0, 255, 0), 1)
-    cv2.imshow("SSD", origimg)
+    b = datetime.datetime.now()
+    c = b - a
+    ms = c.seconds * 1000.0 + c.microseconds/1000.0
+    # print ms,'s'
+    return ms
 
-    k = cv2.waitKey(0) & 0xff
-        #Exit if ESC pressed
-    if k == 27 : return False
-    return True
+    # for i in range(len(box)):
+    #    p1 = (box[i][0], box[i][1])
+    #    p2 = (box[i][2], box[i][3])
+    #    cv2.rectangle(origimg, p1, p2, (0,255,0))
+    #    p3 = (max(p1[0], 15), max(p1[1], 15))
+    #    title = "%s:%.2f" % (CLASSES[int(cls[i])], conf[i])
+    #    cv2.putText(origimg, title, p3, cv2.FONT_ITALIC, 0.6, (0, 255, 0), 1)
+    # cv2.imshow("SSD", origimg)
+    #
+    # k = cv2.waitKey(0) & 0xff
+    #     #Exit if ESC pressed
+    # if k == 27 : return False
+    # return True
 
-for f in os.listdir(test_dir):
-    if detect(test_dir + "/" + f) == False:
-       break
+for i in range(100):
+    meanlist = []
+    for f in os.listdir(test_dir):
+        tt = detect(test_dir + "/" + f)
+        meanlist.append(tt)
+    alltime = alltime + meanlist
+    mean_per_iter.append(np.mean(meanlist))
+
+# plt.hist(np.hstack((x for x in mean_per_iter)), bins='auto')
+plt.hist(alltime, bins='auto')
+plt.xlabel('Time(ms)')
+plt.ylabel('Number of Image')
+plt.title('Mean time : %.2f' % np.mean(mean_per_iter))
+plt.savefig('foo.png', dpi=256)

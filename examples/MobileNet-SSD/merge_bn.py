@@ -1,14 +1,14 @@
-import numpy as np  
-import sys,os  
-caffe_root = '/home/yaochuanqi/ssd/caffe/'
-sys.path.insert(0, caffe_root + 'python')  
-import caffe  
+import numpy as np
+import sys,os
+caffe_root = '/home/jazz/ssd/'
+sys.path.insert(0, caffe_root + 'python')
+import caffe
 
-train_proto = 'MobileNetSSD_train.prototxt'  
-train_model = 'mobilenet_iter_73000.caffemodel'  #should be your snapshot caffemodel
+train_proto = 'examples/MobileNet-SSD/MNSSD_quantized train.prototxt'
+train_model = 'examples/MobileNet-SSD/models/mobilenet_quantized_iter_1000.caffemodel'  #should be your snapshot caffemodel
 
-deploy_proto = 'MobileNetSSD_deploy.prototxt'  
-save_model = 'MobileNetSSD_deploy.caffemodel'
+deploy_proto = 'examples/MobileNet-SSD/MobileNetSSD_quantized_deploy.prototxt'
+save_model = 'examples/MobileNet-SSD/MobileNetSSD_quantized_deploy.caffemodel'
 
 def merge_bn(net, nob):
     '''
@@ -21,7 +21,7 @@ def merge_bn(net, nob):
     for key in net.params.iterkeys():
         if type(net.params[key]) is caffe._caffe.BlobVec:
             if key.endswith("/bn") or key.endswith("/scale"):
-		continue
+		        continue
             else:
                 conv = net.params[key]
                 if not net.params.has_key(key + "/bn"):
@@ -51,14 +51,13 @@ def merge_bn(net, nob):
                     scales1 = scales.reshape((channels,1,1,1))
                     wt = wt * rstd1 * scales1
                     bias = (bias - mean) * rstd * scales + shift
-                    
+
                     nob.params[key][0].data[...] = wt
                     nob.params[key][1].data[...] = bias
-  
 
-net = caffe.Net(train_proto, train_model, caffe.TRAIN)  
-net_deploy = caffe.Net(deploy_proto, caffe.TEST)  
+
+net = caffe.Net(train_proto, train_model, caffe.TRAIN)
+net_deploy = caffe.Net(deploy_proto, caffe.TEST)
 
 merge_bn(net, net_deploy)
 net_deploy.save(save_model)
-
