@@ -1,3 +1,42 @@
+I1102 05:23:16.727124  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720988
+I1102 05:23:16.727147  2955 quantization.cpp:295]
+I1102 05:23:17.313586  2955 quantization.cpp:293]
+I1102 05:24:02.982504  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.655101
+I1102 05:24:02.982560  2955 quantization.cpp:295]
+I1102 05:24:50.578722  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
+I1102 05:25:38.265303  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
+I1102 05:26:25.559303  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
+I1102 05:27:13.443630  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
+I1102 05:28:00.600210  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
+I1102 05:28:46.506022  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.522433
+I1102 05:29:32.072530  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.521715
+I1102 05:29:32.306864  2955 quantization.cpp:381] ------------------------------
+I1102 05:29:32.306882  2955 quantization.cpp:382] Network accuracy analysis for
+I1102 05:29:32.306885  2955 quantization.cpp:383] Convolutional (CONV) and fully
+I1102 05:29:32.306887  2955 quantization.cpp:384] connected (FC) layers.
+I1102 05:29:32.306890  2955 quantization.cpp:385] Baseline 32bit float: 0.720843
+I1102 05:29:32.306893  2955 quantization.cpp:386] Dynamic fixed point CONV
+I1102 05:29:32.306895  2955 quantization.cpp:387] weights:
+I1102 05:29:32.306897  2955 quantization.cpp:389] 16bit: 	0.720988
+I1102 05:29:32.306900  2955 quantization.cpp:389] 8bit: 	0.655101
+I1102 05:29:32.306902  2955 quantization.cpp:392] Dynamic fixed point FC
+I1102 05:29:32.306905  2955 quantization.cpp:393] weights:
+I1102 05:29:32.306906  2955 quantization.cpp:395] 16bit: 	0.720843
+I1102 05:29:32.306908  2955 quantization.cpp:395] 8bit: 	0.720843
+I1102 05:29:32.306910  2955 quantization.cpp:395] 4bit: 	0.720843
+I1102 05:29:32.306912  2955 quantization.cpp:395] 2bit: 	0.720843
+I1102 05:29:32.306915  2955 quantization.cpp:395] 1bit: 	0.720843
+I1102 05:29:32.306917  2955 quantization.cpp:397] Dynamic fixed point layer
+I1102 05:29:32.306919  2955 quantization.cpp:398] activations:
+I1102 05:29:32.306921  2955 quantization.cpp:400] 16bit: 	0.522433
+I1102 05:29:32.306924  2955 quantization.cpp:403] Dynamic fixed point net:
+I1102 05:29:32.306926  2955 quantization.cpp:404] 16bit CONV weights,
+I1102 05:29:32.306927  2955 quantization.cpp:405] 1bit FC weights,
+I1102 05:29:32.306929  2955 quantization.cpp:406] 32bit layer activations:
+I1102 05:29:32.306931  2955 quantization.cpp:407] Accuracy: 0.521715
+I1102 05:29:32.306933  2955 quantization.cpp:408] Please fine-tune.
+
+
 I1102 05:21:27.533946  2955 quantization.cpp:96] Use GPU with device ID 0
 I1102 05:21:38.179514  2955 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: examples/MobileNet-SSD/MobileNetSSD_trainval.prototxt
 I1102 05:21:38.179553  2955 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
@@ -4527,40 +4566,3 @@ I1102 05:22:31.186097  2955 net.cpp:283] Network initialization done.
 I1102 05:22:31.195888  2955 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: examples/MobileNet-SSD/models/mobilenet_iter_1000.caffemodel
 I1102 05:22:31.195919  2955 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
 I1102 05:22:31.201241  2955 net.cpp:808] Ignoring source layer mbox_loss
-I1102 05:23:16.727124  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720988
-I1102 05:23:16.727147  2955 quantization.cpp:295]
-I1102 05:23:17.313586  2955 quantization.cpp:293]
-I1102 05:24:02.982504  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.655101
-I1102 05:24:02.982560  2955 quantization.cpp:295]
-I1102 05:24:50.578722  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
-I1102 05:25:38.265303  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
-I1102 05:26:25.559303  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
-I1102 05:27:13.443630  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
-I1102 05:28:00.600210  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.720843
-I1102 05:28:46.506022  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.522433
-I1102 05:29:32.072530  2955 quantization.cpp:253]     Test net output #0: detection_eval = 0.521715
-I1102 05:29:32.306864  2955 quantization.cpp:381] ------------------------------
-I1102 05:29:32.306882  2955 quantization.cpp:382] Network accuracy analysis for
-I1102 05:29:32.306885  2955 quantization.cpp:383] Convolutional (CONV) and fully
-I1102 05:29:32.306887  2955 quantization.cpp:384] connected (FC) layers.
-I1102 05:29:32.306890  2955 quantization.cpp:385] Baseline 32bit float: 0.720843
-I1102 05:29:32.306893  2955 quantization.cpp:386] Dynamic fixed point CONV
-I1102 05:29:32.306895  2955 quantization.cpp:387] weights:
-I1102 05:29:32.306897  2955 quantization.cpp:389] 16bit: 	0.720988
-I1102 05:29:32.306900  2955 quantization.cpp:389] 8bit: 	0.655101
-I1102 05:29:32.306902  2955 quantization.cpp:392] Dynamic fixed point FC
-I1102 05:29:32.306905  2955 quantization.cpp:393] weights:
-I1102 05:29:32.306906  2955 quantization.cpp:395] 16bit: 	0.720843
-I1102 05:29:32.306908  2955 quantization.cpp:395] 8bit: 	0.720843
-I1102 05:29:32.306910  2955 quantization.cpp:395] 4bit: 	0.720843
-I1102 05:29:32.306912  2955 quantization.cpp:395] 2bit: 	0.720843
-I1102 05:29:32.306915  2955 quantization.cpp:395] 1bit: 	0.720843
-I1102 05:29:32.306917  2955 quantization.cpp:397] Dynamic fixed point layer
-I1102 05:29:32.306919  2955 quantization.cpp:398] activations:
-I1102 05:29:32.306921  2955 quantization.cpp:400] 16bit: 	0.522433
-I1102 05:29:32.306924  2955 quantization.cpp:403] Dynamic fixed point net:
-I1102 05:29:32.306926  2955 quantization.cpp:404] 16bit CONV weights,
-I1102 05:29:32.306927  2955 quantization.cpp:405] 1bit FC weights,
-I1102 05:29:32.306929  2955 quantization.cpp:406] 32bit layer activations:
-I1102 05:29:32.306931  2955 quantization.cpp:407] Accuracy: 0.521715
-I1102 05:29:32.306933  2955 quantization.cpp:408] Please fine-tune.

@@ -10,47 +10,41 @@ import caffe
 
 caffe.set_mode_cpu()
 
-# Load the original network and extract the fully connected layers' parameters.
-net1 = caffe.Net('/home/jazz/ssd/examples/MobileNet-SSD/model_quantized/MNSSD_quantized_trainval.prototxt',
-                 'examples/MobileNet-SSD/models/mobilenet_quantized_iter_1000.caffemodel',
-                  caffe.TEST)
+def setZero(thres):
+    net = caffe.Net('examples/MobileNet-SSD/model_quantized/MNSSD_quantized_trainval.prototxt',
+                     'examples/MobileNet-SSD/models/mobilenet_quantized_iter_1000.caffemodel',
+                      caffe.TEST)
 
-# net2 = caffe.Net('lenet.prototxt',
-#                 'zero.caffemodel',
-#                 caffe.TEST)
-# for each layer, show the output shape
-ws = np.array([])
-for k, v in net1.params.items():
-    print k," ",v[0].data.shape
-    ws = np.hstack((ws, v[0].data.flatten()))
+    ws = np.array([])
+    num = 0
+    for k, v in net.params.items():
+        print k," ",v[0].data.shape
+        num += len(v[0].data[v[0].data == 0])
+        ws = np.hstack((ws, v[0].data.flatten()))
 
-print np.histogram(np.absolute(ws), bins=[0,1e-6,100])[0][:50]
-print np.histogram(np.absolute(ws), bins=[0,1e-6,100])[1][:50]
-# plt.hist(np.absolute(ws), bins=1000, label='Before quantization')
-# plt.show()
+    print num
+    print len(ws[ws == 0])
+
+    print np.histogram(np.absolute(ws), bins=[0,float(thres),100])[0][:50]
+    print np.histogram(np.absolute(ws), bins=[0,float(thres),100])[1][:50]
+
+    for k, v in net.params.items():
+        v[0].data[ np.absolute(v[0].data) < np.histogram(np.absolute(ws),bins = [0,float(thres),100])[1][1]] = 0
+
+    net.save('examples/MobileNet-SSD/MobileNetSSD_quantized_zero_deploy.caffemodel')
 
 
-for k, v in net1.params.items():
-    v[0].data[ np.absolute(v[0].data) < np.histogram(np.absolute(ws),bins = [0,1e-6,100])[1][1]] = 0
+def checkZero():
+    net = caffe.Net('examples/MobileNet-SSD/model_quantized/MNSSD_quantized_trainval.prototxt',
+                     'examples/MobileNet-SSD/MobileNetSSD_quantized_zero_deploy.caffemodel',
+                      caffe.TEST)
+
+    num = 0
+    for k, v in net.params.items():
+        num += len(v[0].data[v[0].data == 0])
+
+    print num
 
 
-ws = np.array([])
-for k, v in net1.params.items():
-    print k," ",v[0].data.shape
-#accuracy = 0.9909
-#I1026 14:38:56.076452  6765 caffe.cpp:330] loss = 0.0289774 (* 1 = 0.0289774 loss)
-#
-# w1 = net1.params['conv2'][0]
-# b1 = net1.params['conv2'][1]
-# # w2 = net2.params['conv2'][0]
-# # b2 = net2.params['conv2'][1]
-# # print np.histogram(np.absolute(w),bins = 1000)[0][:50]
-# # print np.histogram(np.absolute(w),bins = 1000)[1][:50]
-# # print np.histogram(np.absolute(w),bins = 1000)[1][1]
-#
-# w1.data[ w1.data < np.histogram(np.absolute(w1.data),bins = 1000)[1][1]] = 0
-# # b.data[...] = 0
-# # print b1.data
-# # print '|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||'
-# # print b2.data
-net1.save('examples/MobileNet-SSD/MobileNetSSD_quantized_zero_deploy.caffemodel')
+setZero('1e-5')
+checkZero()

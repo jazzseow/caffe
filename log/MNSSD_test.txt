@@ -1,6 +1,10 @@
+I1102 05:14:50.430181  2456 caffe.cpp:348]     Test net output #0: detection_eval = 0.720843
+
+
 I1102 05:13:41.998478  2456 caffe.cpp:366] Use GPU with device ID 0
 I1102 05:13:51.658920  2456 caffe.cpp:370] GPU device name: Tesla K80
 I1102 05:13:54.369488  2456 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: examples/MobileNet-SSD/MobileNetSSD_trainval.prototxt
+I1102 05:14:03.269016  2456 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: examples/MobileNet-SSD/models/mobilenet_iter_1000.caffemodel
 I1102 05:13:54.369526  2456 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
 I1102 05:13:54.370707  2456 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer data
 I1102 05:13:54.370729  2456 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer conv0
@@ -80,7 +84,7 @@ I1102 05:13:54.371086  2456 net.cpp:322] The NetState phase (1) differed from th
 I1102 05:13:54.371095  2456 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer conv16_2_mbox_loc
 I1102 05:13:54.371104  2456 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer conv17_2_mbox_loc
 I1102 05:13:54.371124  2456 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer mbox_loss
-I1102 05:13:54.372053  2456 net.cpp:58] Initializing net from parameters: 
+I1102 05:13:54.372053  2456 net.cpp:58] Initializing net from parameters:
 name: "MobileNet-SSD"
 state {
   phase: TEST
