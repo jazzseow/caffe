@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 import numpy as np
 import sys,os
 import cv2
@@ -8,9 +10,9 @@ import caffe
 import matplotlib.pyplot as plt
 
 
-net_file= 'examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.prototxt'
-caffe_model='examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.caffemodel'
-# test_dir = "examples/MobileNet-SSD/images"
+net_file= 'examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.prototxt'
+caffe_model='examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.caffemodel'
+#test_dir = "examples/MobileNet-SSD/images"
 test_dir = "data/VOCdevkit/VOC2007/JPEGImages"
 
 if not os.path.exists(caffe_model):
@@ -18,7 +20,7 @@ if not os.path.exists(caffe_model):
     print("use merge_bn.py to generate it.")
     exit()
 
-caffe.set_mode_cpu();
+caffe.set_mode_gpu();
 net = caffe.Net(net_file,caffe_model,caffe.TEST)
 
 CLASSES = ('background',
@@ -88,4 +90,4 @@ plt.hist(meanlist, bins='auto')
 plt.xlabel('Time(ms)')
 plt.ylabel('Number of Image')
 plt.title('Mean time : %.2f' % np.mean(meanlist))
-plt.savefig('log/model_1000_time.png', dpi=256)
+plt.savefig('log/model_quantized_time.png', dpi=256)
