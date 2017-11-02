@@ -11,8 +11,8 @@ import caffe
 caffe.set_mode_cpu()
 
 # Load the original network and extract the fully connected layers' parameters.
-net1 = caffe.Net('examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.prototxt',
-                 'examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.caffemodel',
+net1 = caffe.Net('examples/MobileNet-SSD/MobileNetSSD_trainval.prototxt',
+                 'examples/MobileNet-SSD/models/mobilenet_quantized_iter_1000.caffemodel',
                   caffe.TEST)
 
 # net2 = caffe.Net('lenet.prototxt',
