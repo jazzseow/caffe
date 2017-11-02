@@ -6,5 +6,4 @@
 # fi
 mkdir -p examples/MobileNet-SSD/models
 build/tools/caffe train -solver="examples/MobileNet-SSD/solver_train.prototxt" \
-	-weights="examples/MobileNet-SSD/mobilenet_iter_73000.caffemodel" \
-	-gpu 0,1,2,3
+-weights="examples/Mobi-gpu 0,1,2,3

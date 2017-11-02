@@ -23,10 +23,8 @@ using caffe::Timer;
 using caffe::vector;
 using std::ostringstream;
 
-DEFINE_string(train_model, "",
-    "The train model definition protocol buffer text file..");
-DEFINE_string(test_model, "",
-    "The test model definition protocol buffer text file..");
+DEFINE_string(model, "",
+    "The train_test model definition protocol buffer text file..");
 DEFINE_string(weights, "",
     "The trained weights.");
 DEFINE_string(trimming_mode, "",
@@ -82,13 +80,12 @@ static BrewFunction GetBrewFunction(const caffe::string& name) {
 
 // Quantize a 32-bit FP network to smaller word width.
 int quantize(){
-  CHECK_GT(FLAGS_train_model.size(), 0) << "Need a model definition to score.";
-  CHECK_GT(FLAGS_test_model.size(), 0) << "Need a model definition to score.";
+  CHECK_GT(FLAGS_model.size(), 0) << "Need a model definition to score.";
   CHECK_GT(FLAGS_weights.size(), 0) << "Need model weights to score.";
   CHECK_GT(FLAGS_model_quantized.size(), 0) << "Need network description "
       "output path.";
   CHECK_GT(FLAGS_trimming_mode.size(), 0) << "Need trimming mode.";
-  Quantization* q = new Quantization(FLAGS_train_model, FLAGS_test_model, FLAGS_weights,
+  Quantization* q = new Quantization(FLAGS_model, FLAGS_weights,
       FLAGS_model_quantized, FLAGS_iterations, FLAGS_trimming_mode,
       FLAGS_error_margin, FLAGS_gpu, FLAGS_detection);
   q->QuantizeNet();
