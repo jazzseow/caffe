@@ -16,8 +16,8 @@ caffe_model1='examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.caffemo
 net_file2= 'examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.prototxt'
 caffe_model2='examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.caffemodel'
 
-test_dir = "examples/MobileNet-SSD/images"
-# test_dir = "data/VOCdevkit/VOC2007/JPEGImages"
+# test_dir = "examples/MobileNet-SSD/images"
+test_dir = "data/VOCdevkit/VOC2007/JPEGImages"
 
 CLASSES = ('background',
            'aeroplane', 'bicycle', 'bird', 'boat',
