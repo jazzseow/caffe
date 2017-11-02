@@ -1,203 +1,10 @@
 name: "MobileNet-SSD"
-layer {
-  name: "data"
-  type: "AnnotatedData"
-  top: "data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  transform_param {
-    scale: 0.007843
-    mirror: true
-    mean_value: 127.5
-    mean_value: 127.5
-    mean_value: 127.5
-    resize_param {
-      prob: 1
-      resize_mode: WARP
-      height: 300
-      width: 300
-      interp_mode: LINEAR
-      interp_mode: AREA
-      interp_mode: NEAREST
-      interp_mode: CUBIC
-      interp_mode: LANCZOS4
-    }
-    emit_constraint {
-      emit_type: CENTER
-    }
-    distort_param {
-      brightness_prob: 0.5
-      brightness_delta: 32
-      contrast_prob: 0.5
-      contrast_lower: 0.5
-      contrast_upper: 1.5
-      hue_prob: 0.5
-      hue_delta: 18
-      saturation_prob: 0.5
-      saturation_lower: 0.5
-      saturation_upper: 1.5
-      random_order_prob: 0
-    }
-    expand_param {
-      prob: 0.5
-      max_expand_ratio: 4
-    }
-  }
-  data_param {
-    source: "examples/VOC0712/VOC0712_trainval_lmdb"
-    batch_size: 24
-    backend: LMDB
-  }
-  annotated_data_param {
-    batch_sampler {
-      max_sample: 1
-      max_trials: 1
-    }
-    batch_sampler {
-      sampler {
-        min_scale: 0.3
-        max_scale: 1
-        min_aspect_ratio: 0.5
-        max_aspect_ratio: 2
-      }
-      sample_constraint {
-        min_jaccard_overlap: 0.1
-      }
-      max_sample: 1
-      max_trials: 50
-    }
-    batch_sampler {
-      sampler {
-        min_scale: 0.3
-        max_scale: 1
-        min_aspect_ratio: 0.5
-        max_aspect_ratio: 2
-      }
-      sample_constraint {
-        min_jaccard_overlap: 0.3
-      }
-      max_sample: 1
-      max_trials: 50
-    }
-    batch_sampler {
-      sampler {
-        min_scale: 0.3
-        max_scale: 1
-        min_aspect_ratio: 0.5
-        max_aspect_ratio: 2
-      }
-      sample_constraint {
-        min_jaccard_overlap: 0.5
-      }
-      max_sample: 1
-      max_trials: 50
-    }
-    batch_sampler {
-      sampler {
-        min_scale: 0.3
-        max_scale: 1
-        min_aspect_ratio: 0.5
-        max_aspect_ratio: 2
-      }
-      sample_constraint {
-        min_jaccard_overlap: 0.7
-      }
-      max_sample: 1
-      max_trials: 50
-    }
-    batch_sampler {
-      sampler {
-        min_scale: 0.3
-        max_scale: 1
-        min_aspect_ratio: 0.5
-        max_aspect_ratio: 2
-      }
-      sample_constraint {
-        min_jaccard_overlap: 0.9
-      }
-      max_sample: 1
-      max_trials: 50
-    }
-    batch_sampler {
-      sampler {
-        min_scale: 0.3
-        max_scale: 1
-        min_aspect_ratio: 0.5
-        max_aspect_ratio: 2
-      }
-      sample_constraint {
-        max_jaccard_overlap: 1
-      }
-      max_sample: 1
-      max_trials: 50
-    }
-    label_map_file: "data/VOC0712/labelmap_voc.prototxt"
-  }
-}
-layer {
-  name: "data"
-  type: "AnnotatedData"
-  top: "data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  transform_param {
-    scale: 0.007843
-    mean_value: 127.5
-    mean_value: 127.5
-    mean_value: 127.5
-    resize_param {
-      prob: 1
-      resize_mode: WARP
-      height: 300
-      width: 300
-      interp_mode: LINEAR
-    }
-  }
-  data_param {
-    source: "examples/VOC0712/VOC0712_test_lmdb"
-    batch_size: 8
-    backend: LMDB
-  }
-  annotated_data_param {
-    batch_sampler {
-    }
-    label_map_file: "data/VOC0712/labelmap_voc.prototxt"
-  }
-}
-layer {
-  name: "conv0"
-  type: "ConvolutionRistretto"
-  bottom: "data"
-  top: "conv0"
-  param {
-    lr_mult: 0.1
-    decay_mult: 0.1
-  }
-  include {
-    phase: TRAIN
-  }
-  convolution_param {
-    num_output: 32
-    bias_term: false
-    pad: 1
-    kernel_size: 3
-    stride: 2
-    weight_filler {
-      type: "msra"
-    }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 32
-    fl_layer_out: 27
-    fl_params: 1
-  }
+input: "data"
+input_shape {
+  dim: 1
+  dim: 3
+  dim: 300
+  dim: 300
 }
 layer {
   name: "conv0"
@@ -224,10 +31,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 32
     fl_layer_out: 27
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -320,10 +127,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
     fl_layer_out: 26
-    fl_params: 0
+    fl_params: 12
   }
 }
 layer {
@@ -352,10 +159,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
     fl_layer_out: 26
-    fl_params: 0
+    fl_params: 12
   }
 }
 layer {
@@ -445,10 +252,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 24
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -474,10 +281,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 24
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -571,10 +378,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 24
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -604,10 +411,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 24
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -697,10 +504,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
     fl_layer_out: 25
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -726,10 +533,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
     fl_layer_out: 25
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -822,10 +629,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 25
     fl_layer_out: 26
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -854,10 +661,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 25
     fl_layer_out: 26
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -947,10 +754,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 26
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -976,10 +783,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 26
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -1073,10 +880,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 28
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -1106,10 +913,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 28
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -1199,10 +1006,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -1228,10 +1035,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -1324,10 +1131,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 2
+    fl_layer_out: 28
+    fl_params: 14
   }
 }
 layer {
@@ -1356,10 +1163,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 2
+    fl_layer_out: 28
+    fl_params: 14
   }
 }
 layer {
@@ -1449,10 +1256,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 28
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -1478,10 +1285,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 28
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -1575,10 +1382,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 3
+    fl_layer_out: 28
+    fl_params: 15
   }
 }
 layer {
@@ -1608,10 +1415,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 3
+    fl_layer_out: 28
+    fl_params: 15
   }
 }
 layer {
@@ -1701,10 +1508,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -1730,10 +1537,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -1826,10 +1633,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
-    fl_layer_out: 27
-    fl_params: 2
+    fl_layer_out: 28
+    fl_params: 14
   }
 }
 layer {
@@ -1858,10 +1665,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
-    fl_layer_out: 27
-    fl_params: 2
+    fl_layer_out: 28
+    fl_params: 14
   }
 }
 layer {
@@ -1951,10 +1758,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -1980,10 +1787,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -2076,10 +1883,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -2108,10 +1915,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -2201,10 +2008,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -2230,10 +2037,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -2326,10 +2133,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
-    fl_layer_out: 27
-    fl_params: 3
+    fl_layer_out: 28
+    fl_params: 15
   }
 }
 layer {
@@ -2358,10 +2165,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
-    fl_layer_out: 27
-    fl_params: 3
+    fl_layer_out: 28
+    fl_params: 15
   }
 }
 layer {
@@ -2451,10 +2258,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 28
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -2480,10 +2287,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 28
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -2576,10 +2383,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 28
-    fl_params: 3
+    fl_layer_out: 27
+    fl_params: 15
   }
 }
 layer {
@@ -2608,10 +2415,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 28
-    fl_params: 3
+    fl_layer_out: 27
+    fl_params: 15
   }
 }
 layer {
@@ -2701,10 +2508,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 27
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -2730,10 +2537,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 27
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -2826,10 +2633,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 3
+    fl_layer_out: 26
+    fl_params: 15
   }
 }
 layer {
@@ -2858,10 +2665,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 3
+    fl_layer_out: 26
+    fl_params: 15
   }
 }
 layer {
@@ -2951,10 +2758,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 26
     fl_layer_out: 26
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -2980,10 +2787,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 27
+    bw_params: 16
+    fl_layer_in: 26
     fl_layer_out: 26
-    fl_params: 1
+    fl_params: 13
   }
 }
 layer {
@@ -3077,10 +2884,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 27
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -3110,10 +2917,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 27
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -3203,10 +3010,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 28
-    fl_params: 2
+    fl_layer_out: 27
+    fl_params: 14
   }
 }
 layer {
@@ -3232,10 +3039,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 27
-    fl_layer_out: 28
-    fl_params: 2
+    fl_layer_out: 27
+    fl_params: 14
   }
 }
 layer {
@@ -3328,10 +3135,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 26
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -3360,10 +3167,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 26
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -3453,10 +3260,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 26
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -3482,10 +3289,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 26
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -3575,10 +3382,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
-    fl_layer_out: 26
-    fl_params: 2
+    fl_layer_out: 27
+    fl_params: 14
   }
 }
 layer {
@@ -3604,10 +3411,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
-    fl_layer_out: 26
-    fl_params: 2
+    fl_layer_out: 27
+    fl_params: 14
   }
 }
 layer {
@@ -3699,10 +3506,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 26
-    fl_layer_out: 28
-    fl_params: 2
+    bw_params: 16
+    fl_layer_in: 27
+    fl_layer_out: 27
+    fl_params: 14
   }
 }
 layer {
@@ -3730,10 +3537,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 26
-    fl_layer_out: 28
-    fl_params: 2
+    bw_params: 16
+    fl_layer_in: 27
+    fl_layer_out: 27
+    fl_params: 14
   }
 }
 layer {
@@ -3823,10 +3630,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 28
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -3852,10 +3659,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 28
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -3947,10 +3754,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -3978,10 +3785,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 28
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4071,10 +3878,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 29
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4100,10 +3907,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 29
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4195,10 +4002,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 29
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4226,10 +4033,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 29
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4319,10 +4126,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 29
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -4348,10 +4155,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 29
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -4443,10 +4250,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 29
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4474,10 +4281,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 29
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4574,10 +4381,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -4610,10 +4417,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 27
-    fl_params: 2
+    fl_params: 14
   }
 }
 layer {
@@ -4664,10 +4471,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 25
-    fl_params: 4
+    fl_params: 16
   }
 }
 layer {
@@ -4739,10 +4546,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 27
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4775,10 +4582,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 27
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4829,10 +4636,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 26
     fl_layer_out: 26
-    fl_params: 4
+    fl_params: 16
   }
 }
 layer {
@@ -4906,10 +4713,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 28
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4942,10 +4749,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 28
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -4996,10 +4803,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
-    fl_layer_in: 28
+    bw_params: 16
+    fl_layer_in: 27
     fl_layer_out: 27
-    fl_params: 4
+    fl_params: 16
   }
 }
 layer {
@@ -5073,10 +4880,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 29
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -5109,10 +4916,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 29
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -5163,10 +4970,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 28
     fl_layer_out: 26
-    fl_params: 4
+    fl_params: 16
   }
 }
 layer {
@@ -5240,10 +5047,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 30
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -5276,10 +5083,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 30
-    fl_params: 3
+    fl_params: 15
   }
 }
 layer {
@@ -5330,10 +5137,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 27
-    fl_params: 4
+    fl_params: 16
   }
 }
 layer {
@@ -5407,10 +5214,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 29
-    fl_params: 4
+    fl_params: 16
   }
 }
 layer {
@@ -5443,10 +5250,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 29
-    fl_params: 4
+    fl_params: 16
   }
 }
 layer {
@@ -5497,10 +5304,10 @@ layer {
   quantization_param {
     bw_layer_in: 32
     bw_layer_out: 32
-    bw_params: 4
+    bw_params: 16
     fl_layer_in: 29
     fl_layer_out: 27
-    fl_params: 4
+    fl_params: 16
   }
 }
 layer {

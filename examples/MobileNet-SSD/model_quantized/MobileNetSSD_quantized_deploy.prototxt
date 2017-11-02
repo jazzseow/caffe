@@ -8,7 +8,7 @@ input_shape {
 }
 layer {
   name: "conv0"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "data"
   top: "conv0"
   param {
@@ -32,14 +32,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 32
-    fl_layer_out: 27
-    fl_params: 13
-  }
 }
 layer {
   name: "conv0/relu"
@@ -49,7 +41,7 @@ layer {
 }
 layer {
   name: "conv1/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv0"
   top: "conv1/dw"
   param {
@@ -74,16 +66,7 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 26
-    fl_params: 12
-  }
 }
-
 layer {
   name: "conv1/dw/relu"
   type: "ReLU"
@@ -92,7 +75,7 @@ layer {
 }
 layer {
   name: "conv1"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv1/dw"
   top: "conv1"
   param {
@@ -114,14 +97,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 24
-    fl_params: 13
-  }
 }
 layer {
   name: "conv1/relu"
@@ -131,7 +106,7 @@ layer {
 }
 layer {
   name: "conv2/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv1"
   top: "conv2/dw"
   param {
@@ -157,14 +132,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 24
-    fl_layer_out: 27
-    fl_params: 14
-  }
 }
 layer {
   name: "conv2/dw/relu"
@@ -174,7 +141,7 @@ layer {
 }
 layer {
   name: "conv2"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv2/dw"
   top: "conv2"
   param {
@@ -195,14 +162,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 25
-    fl_params: 13
   }
 }
 layer {
@@ -213,7 +172,7 @@ layer {
 }
 layer {
   name: "conv3/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv2"
   top: "conv3/dw"
   param {
@@ -238,14 +197,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 25
-    fl_layer_out: 26
-    fl_params: 13
-  }
 }
 layer {
   name: "conv3/dw/relu"
@@ -255,7 +206,7 @@ layer {
 }
 layer {
   name: "conv3"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv3/dw"
   top: "conv3"
   param {
@@ -277,14 +228,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 26
-    fl_params: 13
-  }
 }
 layer {
   name: "conv3/relu"
@@ -294,7 +237,7 @@ layer {
 }
 layer {
   name: "conv4/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv3"
   top: "conv4/dw"
   param {
@@ -320,14 +263,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 28
-    fl_params: 15
-  }
 }
 layer {
   name: "conv4/dw/relu"
@@ -337,7 +272,7 @@ layer {
 }
 layer {
   name: "conv4"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv4/dw"
   top: "conv4"
   param {
@@ -358,14 +293,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 27
-    fl_params: 14
   }
 }
 layer {
@@ -376,7 +303,7 @@ layer {
 }
 layer {
   name: "conv5/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv4"
   top: "conv5/dw"
   param {
@@ -401,14 +328,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 28
-    fl_params: 14
-  }
 }
 layer {
   name: "conv5/dw/relu"
@@ -418,7 +337,7 @@ layer {
 }
 layer {
   name: "conv5"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv5/dw"
   top: "conv5"
   param {
@@ -440,14 +359,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 27
-    fl_params: 14
-  }
 }
 layer {
   name: "conv5/relu"
@@ -457,7 +368,7 @@ layer {
 }
 layer {
   name: "conv6/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv5"
   top: "conv6/dw"
   param {
@@ -483,14 +394,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 28
-    fl_params: 15
-  }
 }
 layer {
   name: "conv6/dw/relu"
@@ -500,7 +403,7 @@ layer {
 }
 layer {
   name: "conv6"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv6/dw"
   top: "conv6"
   param {
@@ -521,14 +424,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 28
-    fl_params: 14
   }
 }
 layer {
@@ -539,7 +434,7 @@ layer {
 }
 layer {
   name: "conv7/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv6"
   top: "conv7/dw"
   param {
@@ -564,14 +459,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 28
-    fl_params: 14
-  }
 }
 layer {
   name: "conv7/dw/relu"
@@ -581,7 +468,7 @@ layer {
 }
 layer {
   name: "conv7"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv7/dw"
   top: "conv7"
   param {
@@ -602,14 +489,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 28
-    fl_params: 13
   }
 }
 layer {
@@ -620,7 +499,7 @@ layer {
 }
 layer {
   name: "conv8/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv7"
   top: "conv8/dw"
   param {
@@ -645,14 +524,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 28
-    fl_params: 14
-  }
 }
 layer {
   name: "conv8/dw/relu"
@@ -662,7 +533,7 @@ layer {
 }
 layer {
   name: "conv8"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv8/dw"
   top: "conv8"
   param {
@@ -683,14 +554,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 28
-    fl_params: 13
   }
 }
 layer {
@@ -701,7 +564,7 @@ layer {
 }
 layer {
   name: "conv9/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv8"
   top: "conv9/dw"
   param {
@@ -726,14 +589,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 28
-    fl_params: 15
-  }
 }
 layer {
   name: "conv9/dw/relu"
@@ -743,7 +598,7 @@ layer {
 }
 layer {
   name: "conv9"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv9/dw"
   top: "conv9"
   param {
@@ -764,14 +619,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 27
-    fl_params: 14
   }
 }
 layer {
@@ -782,7 +629,7 @@ layer {
 }
 layer {
   name: "conv10/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv9"
   top: "conv10/dw"
   param {
@@ -807,14 +654,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 15
-  }
 }
 layer {
   name: "conv10/dw/relu"
@@ -824,7 +663,7 @@ layer {
 }
 layer {
   name: "conv10"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv10/dw"
   top: "conv10"
   param {
@@ -846,14 +685,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 13
-  }
 }
 layer {
   name: "conv10/relu"
@@ -863,7 +694,7 @@ layer {
 }
 layer {
   name: "conv11/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv10"
   top: "conv11/dw"
   param {
@@ -888,14 +719,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 26
-    fl_params: 15
-  }
 }
 layer {
   name: "conv11/dw/relu"
@@ -905,7 +728,7 @@ layer {
 }
 layer {
   name: "conv11"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv11/dw"
   top: "conv11"
   param {
@@ -927,14 +750,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 26
-    fl_params: 13
-  }
 }
 layer {
   name: "conv11/relu"
@@ -944,7 +759,7 @@ layer {
 }
 layer {
   name: "conv12/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv11"
   top: "conv12/dw"
   param {
@@ -970,14 +785,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 27
-    fl_params: 15
-  }
 }
 layer {
   name: "conv12/dw/relu"
@@ -987,7 +794,7 @@ layer {
 }
 layer {
   name: "conv12"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv12/dw"
   top: "conv12"
   param {
@@ -1009,14 +816,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 14
-  }
 }
 layer {
   name: "conv12/relu"
@@ -1026,7 +825,7 @@ layer {
 }
 layer {
   name: "conv13/dw"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv12"
   top: "conv13/dw"
   param {
@@ -1051,14 +850,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 26
-    fl_params: 14
-  }
 }
 layer {
   name: "conv13/dw/relu"
@@ -1068,7 +859,7 @@ layer {
 }
 layer {
   name: "conv13"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv13/dw"
   top: "conv13"
   param {
@@ -1090,14 +881,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 26
-    fl_params: 14
-  }
 }
 layer {
   name: "conv13/relu"
@@ -1107,7 +890,7 @@ layer {
 }
 layer {
   name: "conv14_1"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv13"
   top: "conv14_1"
   param {
@@ -1129,14 +912,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 27
-    fl_params: 14
-  }
 }
 layer {
   name: "conv14_1/relu"
@@ -1146,7 +921,7 @@ layer {
 }
 layer {
   name: "conv14_2"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv14_1"
   top: "conv14_2"
   param {
@@ -1170,14 +945,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 14
-  }
 }
 layer {
   name: "conv14_2/relu"
@@ -1187,7 +954,7 @@ layer {
 }
 layer {
   name: "conv15_1"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv14_2"
   top: "conv15_1"
   param {
@@ -1208,14 +975,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 28
-    fl_params: 15
   }
 }
 layer {
@@ -1226,7 +985,7 @@ layer {
 }
 layer {
   name: "conv15_2"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv15_1"
   top: "conv15_2"
   param {
@@ -1250,14 +1009,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 28
-    fl_params: 15
-  }
 }
 layer {
   name: "conv15_2/relu"
@@ -1267,7 +1018,7 @@ layer {
 }
 layer {
   name: "conv16_1"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv15_2"
   top: "conv16_1"
   param {
@@ -1289,14 +1040,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 29
-    fl_params: 15
-  }
 }
 layer {
   name: "conv16_1/relu"
@@ -1306,7 +1049,7 @@ layer {
 }
 layer {
   name: "conv16_2"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv16_1"
   top: "conv16_2"
   param {
@@ -1330,14 +1073,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 29
-    fl_layer_out: 29
-    fl_params: 15
-  }
 }
 layer {
   name: "conv16_2/relu"
@@ -1347,7 +1082,7 @@ layer {
 }
 layer {
   name: "conv17_1"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv16_2"
   top: "conv17_1"
   param {
@@ -1369,14 +1104,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 29
-    fl_layer_out: 29
-    fl_params: 14
-  }
 }
 layer {
   name: "conv17_1/relu"
@@ -1386,7 +1113,7 @@ layer {
 }
 layer {
   name: "conv17_2"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv17_1"
   top: "conv17_2"
   param {
@@ -1410,14 +1137,6 @@ layer {
       value: 0.0
     }
   }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 29
-    fl_layer_out: 29
-    fl_params: 15
-  }
 }
 layer {
   name: "conv17_2/relu"
@@ -1427,7 +1146,7 @@ layer {
 }
 layer {
   name: "conv11_mbox_loc"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv11"
   top: "conv11_mbox_loc"
   param {
@@ -1448,14 +1167,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 27
-    fl_params: 14
   }
 }
 layer {
@@ -1481,7 +1192,7 @@ layer {
 }
 layer {
   name: "conv11_mbox_conf_new"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv11"
   top: "conv11_mbox_conf"
   param {
@@ -1502,14 +1213,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 25
-    fl_params: 16
   }
 }
 layer {
@@ -1553,7 +1256,7 @@ layer {
 }
 layer {
   name: "conv13_mbox_loc"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv13"
   top: "conv13_mbox_loc"
   param {
@@ -1574,14 +1277,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 27
-    fl_params: 15
   }
 }
 layer {
@@ -1607,7 +1302,7 @@ layer {
 }
 layer {
   name: "conv13_mbox_conf_new"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv13"
   top: "conv13_mbox_conf"
   param {
@@ -1628,14 +1323,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 26
-    fl_layer_out: 26
-    fl_params: 16
   }
 }
 layer {
@@ -1681,7 +1368,7 @@ layer {
 }
 layer {
   name: "conv14_2_mbox_loc"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv14_2"
   top: "conv14_2_mbox_loc"
   param {
@@ -1702,14 +1389,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 28
-    fl_params: 15
   }
 }
 layer {
@@ -1735,7 +1414,7 @@ layer {
 }
 layer {
   name: "conv14_2_mbox_conf_new"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv14_2"
   top: "conv14_2_mbox_conf"
   param {
@@ -1756,14 +1435,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 27
-    fl_layer_out: 27
-    fl_params: 16
   }
 }
 layer {
@@ -1809,7 +1480,7 @@ layer {
 }
 layer {
   name: "conv15_2_mbox_loc"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv15_2"
   top: "conv15_2_mbox_loc"
   param {
@@ -1830,14 +1501,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 29
-    fl_params: 15
   }
 }
 layer {
@@ -1863,7 +1526,7 @@ layer {
 }
 layer {
   name: "conv15_2_mbox_conf_new"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv15_2"
   top: "conv15_2_mbox_conf"
   param {
@@ -1884,14 +1547,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 28
-    fl_layer_out: 26
-    fl_params: 16
   }
 }
 layer {
@@ -1937,7 +1592,7 @@ layer {
 }
 layer {
   name: "conv16_2_mbox_loc"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv16_2"
   top: "conv16_2_mbox_loc"
   param {
@@ -1958,14 +1613,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 29
-    fl_layer_out: 30
-    fl_params: 15
   }
 }
 layer {
@@ -1991,7 +1638,7 @@ layer {
 }
 layer {
   name: "conv16_2_mbox_conf_new"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv16_2"
   top: "conv16_2_mbox_conf"
   param {
@@ -2012,14 +1659,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 29
-    fl_layer_out: 27
-    fl_params: 16
   }
 }
 layer {
@@ -2065,7 +1704,7 @@ layer {
 }
 layer {
   name: "conv17_2_mbox_loc"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv17_2"
   top: "conv17_2_mbox_loc"
   param {
@@ -2086,14 +1725,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 29
-    fl_layer_out: 29
-    fl_params: 16
   }
 }
 layer {
@@ -2119,7 +1750,7 @@ layer {
 }
 layer {
   name: "conv17_2_mbox_conf_new"
-  type: "ConvolutionRistretto"
+  type: "Convolution"
   bottom: "conv17_2"
   top: "conv17_2_mbox_conf"
   param {
@@ -2140,14 +1771,6 @@ layer {
       type: "constant"
       value: 0.0
     }
-  }
-  quantization_param {
-    bw_layer_in: 32
-    bw_layer_out: 32
-    bw_params: 16
-    fl_layer_in: 29
-    fl_layer_out: 27
-    fl_params: 16
   }
 }
 layer {

@@ -10,18 +10,14 @@ import caffe
 import matplotlib.pyplot as plt
 
 
-net_file= 'examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.prototxt'
-caffe_model='examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.caffemodel'
-#test_dir = "examples/MobileNet-SSD/images"
-test_dir = "data/VOCdevkit/VOC2007/JPEGImages"
+net_file1= 'examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.prototxt'
+caffe_model1='examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.caffemodel'
 
-if not os.path.exists(caffe_model):
-    print("MobileNetSSD_deploy.affemodel does not exist,")
-    print("use merge_bn.py to generate it.")
-    exit()
+net_file2= 'examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.prototxt'
+caffe_model2='examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.caffemodel'
 
-caffe.set_mode_gpu();
-net = caffe.Net(net_file,caffe_model,caffe.TEST)
+test_dir = "examples/MobileNet-SSD/images"
+# test_dir = "data/VOCdevkit/VOC2007/JPEGImages"
 
 CLASSES = ('background',
            'aeroplane', 'bicycle', 'bird', 'boat',
@@ -46,7 +42,7 @@ def postprocess(img, out):
     conf = out['detection_out'][0,0,:,2]
     return (box.astype(np.int32), conf, cls)
 
-def detect(imgfile):
+def detect(imgfile,net):
     a = datetime.datetime.now()
 
     origimg = cv2.imread(imgfile)
@@ -63,8 +59,7 @@ def detect(imgfile):
     c = b - a
     ms = c.seconds * 1000.0 + c.microseconds/1000.0
     # print ms,'s'
-    return ms
-
+    #
     # for i in range(len(box)):
     #    p1 = (box[i][0], box[i][1])
     #    p2 = (box[i][2], box[i][3])
@@ -76,18 +71,31 @@ def detect(imgfile):
     #
     # k = cv2.waitKey(0) & 0xff
     #     #Exit if ESC pressed
-    # if k == 27 : return False
-    # return True
+    # if k == 27 : return 0
 
-meanlist = []
+    return ms
+
+caffe.set_mode_cpu();
+net1 = caffe.Net(net_file1,caffe_model1,caffe.TEST)
+
+meanlist1 = []
 for f in os.listdir(test_dir):
-    tt = detect(test_dir + "/" + f)
-    meanlist.append(tt)
+    tt = detect(test_dir + "/" + f,net1)
+    meanlist1.append(tt)
 
+net2 = caffe.Net(net_file2,caffe_model2,caffe.TEST)
 
+meanlist2 = []
+for f in os.listdir(test_dir):
+    tt = detect(test_dir + "/" + f,net2)
+    meanlist2.append(tt)
+
+# plt.figure()
 # plt.hist(np.hstack((x for x in mean_per_iter)), bins='auto')
-plt.hist(meanlist, bins='auto')
+plt.hist(meanlist1, bins='auto', label='Before quantization')
+plt.hist(meanlist2, bins='auto', label='After quantization')
+plt.legend(loc='upper right')
 plt.xlabel('Time(ms)')
 plt.ylabel('Number of Image')
-plt.title('Mean time : %.2f' % np.mean(meanlist))
+plt.title('Mean time BQ: %.2fms, Mean time AQ: %.2fms' % (np.mean(meanlist1),np.mean(meanlist2)))
 plt.savefig('log/model_quantized_time.png', dpi=256)

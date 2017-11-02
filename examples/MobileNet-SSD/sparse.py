@@ -19,11 +19,16 @@ net1 = caffe.Net('examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.pro
 #                 'zero.caffemodel',
 #                 caffe.TEST)
 # for each layer, show the output shape
-
+weights = []
 for k, v in net1.params.items():
     print k," ",v[0].data.shape
+    weights.append(v[0].data)
 
+weights = np.asarray(weights)
+print np.absolute(weights.flatten()).shape
+a= np.ndarray(shape=(2,2), dtype=float, order='F')
 
+print np.histogram([1, 2, 1], bins=[0, 1, 2, 3])
 #accuracy = 0.9909
 #I1026 14:38:56.076452  6765 caffe.cpp:330] loss = 0.0289774 (* 1 = 0.0289774 loss)
 #
