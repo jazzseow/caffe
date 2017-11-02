@@ -98,8 +98,8 @@ for f in os.listdir(test_dir):
     meanlist2.append(tt)
     n += 1
 
-plt.hist(meanlist1, bins='auto', label='Before quantization')
-plt.hist(meanlist2, bins='auto', label='After quantization')
+plt.hist(meanlist1, bins='auto', alpha=0.5, label='Before quantization')
+plt.hist(meanlist2, bins='auto', alpha=0.5, label='After quantization')
 plt.legend(loc='upper right')
 plt.xlabel('Time(ms)')
 plt.ylabel('Number of Image')
