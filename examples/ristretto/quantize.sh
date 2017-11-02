@@ -9,7 +9,7 @@
 
 sudo ./build/tools/ristretto quantize \
 	--model=examples/MobileNet-SSD/MobileNetSSD_trainval.prototxt \
-	--weights=examples/MobileNet-SSD/models/mobilenet_iter_1000.caffemodel \
-	--model_quantized=examples/MobileNet-SSD/MNSSD_quantized.prototxt \
+	--weights=examples/MobileNet-SSD/MobileNetSSD_quantized_zero_deploy.caffemodel \
+	--model_quantized=examples/MobileNet-SSD/MNSSD_quantized_zero.prototxt \
 	--trimming_mode=dynamic_fixed_point --gpu="0,1,2,3" --iterations=100 \
 	--error_margin=3 --detection

@@ -46,5 +46,5 @@ def checkZero():
     print num
 
 
-setZero('1e-5')
+setZero('1.5e-2')
 checkZero()
