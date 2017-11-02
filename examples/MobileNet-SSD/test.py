@@ -11,7 +11,7 @@ import caffe
 caffe.set_mode_cpu()
 
 # Load the original network and extract the fully connected layers' parameters.
-net1 = caffe.Net('MobileNetSSD_deploy.prototxt',
+net1 = caffe.Net('MobileNet-SSD/MNSSD_quantized.prototxt',
                 'MobileNetSSD_deploy.caffemodel',
                 caffe.TEST)
 
@@ -24,7 +24,7 @@ for layer_name, blob in net1.blobs.iteritems():
 
 #accuracy = 0.9909
 #I1026 14:38:56.076452  6765 caffe.cpp:330] loss = 0.0289774 (* 1 = 0.0289774 loss)
-# 
+#
 # w1 = net1.params['conv2'][0]
 # b1 = net1.params['conv2'][1]
 # # w2 = net2.params['conv2'][0]
