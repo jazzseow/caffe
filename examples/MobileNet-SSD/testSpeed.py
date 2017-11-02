@@ -79,19 +79,25 @@ caffe.set_mode_cpu();
 net1 = caffe.Net(net_file1,caffe_model1,caffe.TEST)
 
 meanlist1 = []
+n = 0
 for f in os.listdir(test_dir):
+    if n >= 5000:
+        break
     tt = detect(test_dir + "/" + f,net1)
     meanlist1.append(tt)
+    n += 1
 
 net2 = caffe.Net(net_file2,caffe_model2,caffe.TEST)
 
 meanlist2 = []
+n = 0
 for f in os.listdir(test_dir):
+    if n >= 5000:
+        break
     tt = detect(test_dir + "/" + f,net2)
     meanlist2.append(tt)
+    n += 1
 
-# plt.figure()
-# plt.hist(np.hstack((x for x in mean_per_iter)), bins='auto')
 plt.hist(meanlist1, bins='auto', label='Before quantization')
 plt.hist(meanlist2, bins='auto', label='After quantization')
 plt.legend(loc='upper right')
