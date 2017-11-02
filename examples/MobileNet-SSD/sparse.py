@@ -11,7 +11,7 @@ import caffe
 caffe.set_mode_cpu()
 
 # Load the original network and extract the fully connected layers' parameters.
-net1 = caffe.Net('examples/MobileNet-SSD/MobileNetSSD_trainval.prototxt',
+net1 = caffe.Net('/home/jazz/ssd/examples/MobileNet-SSD/model_quantized/MNSSD_quantized_trainval.prototxt',
                  'examples/MobileNet-SSD/models/mobilenet_quantized_iter_1000.caffemodel',
                   caffe.TEST)
 
@@ -32,6 +32,11 @@ print np.histogram(np.absolute(ws), bins=[0,1e-6,100])[1][:50]
 
 for k, v in net1.params.items():
     v[0].data[ np.absolute(v[0].data) < np.histogram(np.absolute(ws),bins = [0,1e-6,100])[1][1]] = 0
+
+
+ws = np.array([])
+for k, v in net1.params.items():
+    print k," ",v[0].data.shape
 #accuracy = 0.9909
 #I1026 14:38:56.076452  6765 caffe.cpp:330] loss = 0.0289774 (* 1 = 0.0289774 loss)
 #
