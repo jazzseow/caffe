@@ -4,11 +4,11 @@ caffe_root = '/home/jazz/ssd/'
 sys.path.insert(0, caffe_root + 'python')
 import caffe
 
-train_proto = 'examples/MobileNet-SSD/MNSSD_quantized train.prototxt'
-train_model = 'examples/MobileNet-SSD/models/mobilenet_quantized_iter_1000.caffemodel'  #should be your snapshot caffemodel
+train_proto = 'examples/MobileNet-SSD/model_quantized/MNSSD_quantized train.prototxt'
+train_model = 'examples/MobileNet-SSD/MobileNetSSD_quantized_zero.caffemodel'  #should be your snapshot caffemodel
 
-deploy_proto = 'examples/MobileNet-SSD/MobileNetSSD_quantized_deploy.prototxt'
-save_model = 'examples/MobileNet-SSD/MobileNetSSD_quantized_deploy.caffemodel'
+deploy_proto = 'examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.prototxt'
+save_model = 'examples/MobileNet-SSD/MobileNetSSD_quantized_zero_deploy.caffemodel'
 
 def merge_bn(net, nob):
     '''

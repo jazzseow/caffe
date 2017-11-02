@@ -1,3 +1,10 @@
+I1102 23:38:08.287235 14634 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: examples/MobileNet-SSD/MobileNetSSD_quantized_zero_deploy.caffemodel
+I1102 23:38:08.287284 14634 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
+I1102 23:38:08.294119 14634 caffe.cpp:381] Running for 100 iterations.
+I1102 23:38:54.489073 14634 caffe.cpp:345] 20
+I1102 23:38:54.489219 14634 caffe.cpp:348]     Test net output #0: detection_eval = 0.726231
+
+
 I1102 23:37:58.057008 14634 caffe.cpp:366] Use GPU with device ID 0
 I1102 23:38:07.109436 14634 caffe.cpp:370] GPU device name: Tesla K80
 I1102 23:38:07.450227 14634 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: examples/MobileNet-SSD/MobileNetSSD_trainval.prototxt
@@ -80,7 +87,7 @@ I1102 23:38:07.451172 14634 net.cpp:322] The NetState phase (1) differed from th
 I1102 23:38:07.451179 14634 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer conv16_2_mbox_loc
 I1102 23:38:07.451186 14634 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer conv17_2_mbox_loc
 I1102 23:38:07.451210 14634 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer mbox_loss
-I1102 23:38:07.452127 14634 net.cpp:58] Initializing net from parameters: 
+I1102 23:38:07.452127 14634 net.cpp:58] Initializing net from parameters:
 name: "MobileNet-SSD"
 state {
   phase: TEST
@@ -3975,8 +3982,3 @@ I1102 23:38:08.268659 14634 net.cpp:228] data_data_0_split does not need backwar
 I1102 23:38:08.268662 14634 net.cpp:228] data does not need backward computation.
 I1102 23:38:08.268664 14634 net.cpp:270] This network produces output detection_eval
 I1102 23:38:08.268757 14634 net.cpp:283] Network initialization done.
-I1102 23:38:08.287235 14634 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: examples/MobileNet-SSD/MobileNetSSD_quantized_zero_deploy.caffemodel
-I1102 23:38:08.287284 14634 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
-I1102 23:38:08.294119 14634 caffe.cpp:381] Running for 100 iterations.
-I1102 23:38:54.489073 14634 caffe.cpp:345] 20
-I1102 23:38:54.489219 14634 caffe.cpp:348]     Test net output #0: detection_eval = 0.726231

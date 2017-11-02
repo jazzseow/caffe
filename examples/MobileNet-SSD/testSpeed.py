@@ -16,6 +16,9 @@ caffe_model1='examples/MobileNet-SSD/model_1000/MobileNetSSD_1000_deploy.caffemo
 net_file2= 'examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.prototxt'
 caffe_model2='examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.caffemodel'
 
+net_file3= 'examples/MobileNet-SSD/model_zero/MobileNetSSD_quantized_zero_deploy.prototxt'
+caffe_model3='examples/MobileNet-SSD/model_zero/MobileNetSSD_quantized_zero_deploy.caffemodel'
+
 # test_dir = "examples/MobileNet-SSD/images"
 test_dir = "data/VOCdevkit/VOC2007/JPEGImages"
 
@@ -98,10 +101,22 @@ for f in os.listdir(test_dir):
     meanlist2.append(tt)
     n += 1
 
+net3 = caffe.Net(net_file3,caffe_model3,caffe.TEST)
+
+meanlist3 = []
+n = 0
+for f in os.listdir(test_dir):
+    if n >= 5000:
+        break
+    tt = detect(test_dir + "/" + f,net3)
+    meanlist3.append(tt)
+    n += 1
+
 plt.hist(meanlist1, bins='auto', alpha=0.5, label='Before quantization')
 plt.hist(meanlist2, bins='auto', alpha=0.5, label='After quantization')
+plt.hist(meanlist3, bins='auto', alpha=0.5, label='After quantization & sparse')
 plt.legend(loc='upper right')
 plt.xlabel('Time(ms)')
 plt.ylabel('Number of Image')
-plt.title('Mean time BQ: %.2fms, Mean time AQ: %.2fms' % (np.mean(meanlist1),np.mean(meanlist2)))
-plt.savefig('log/model_quantized_time.png', dpi=256)
+plt.title('Mean time BQ: %.2fms, Mean time AQ: %.2fms, Mean time Zero: %.2fms' % (np.mean(meanlist1),np.mean(meanlist2),np.mean(meanlist3)))
+plt.savefig('log/model_quantized_zero_time.png', dpi=256)
