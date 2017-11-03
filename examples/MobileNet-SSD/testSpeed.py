@@ -84,37 +84,37 @@ net1 = caffe.Net(net_file1,caffe_model1,caffe.TEST)
 meanlist1 = []
 n = 0
 for f in os.listdir(test_dir):
-    if n >= 5000:
-        break
+#    if n >= 5000:
+ #       break
     tt = detect(test_dir + "/" + f,net1)
     meanlist1.append(tt)
-    n += 1
+  #  n += 1
 
 net2 = caffe.Net(net_file2,caffe_model2,caffe.TEST)
 
 meanlist2 = []
 n = 0
 for f in os.listdir(test_dir):
-    if n >= 5000:
-        break
+   # if n >= 5000:
+    #    break
     tt = detect(test_dir + "/" + f,net2)
     meanlist2.append(tt)
-    n += 1
+    #n += 1
 
 net3 = caffe.Net(net_file3,caffe_model3,caffe.TEST)
 
 meanlist3 = []
 n = 0
 for f in os.listdir(test_dir):
-    if n >= 5000:
-        break
+    #if n >= 5000:
+     #   break
     tt = detect(test_dir + "/" + f,net3)
     meanlist3.append(tt)
-    n += 1
+    #n += 1
 
-plt.hist(meanlist1, bins='auto', alpha=0.5, label='Before quantization')
-plt.hist(meanlist2, bins='auto', alpha=0.5, label='After quantization')
-plt.hist(meanlist3, bins='auto', alpha=0.5, label='After quantization & sparse')
+plt.hist(meanlist1, bins='auto', alpha=0.35, label='Before quantization')
+plt.hist(meanlist2, bins='auto', alpha=0.35, label='After quantization')
+plt.hist(meanlist3, bins='auto', alpha=0.35, label='After quantization & sparse')
 plt.legend(loc='upper right')
 plt.xlabel('Time(ms)')
 plt.ylabel('Number of Image')
