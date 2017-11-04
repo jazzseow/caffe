@@ -112,9 +112,9 @@ for f in os.listdir(test_dir):
     meanlist3.append(tt)
     #n += 1
 
-plt.hist(meanlist1, bins='auto', alpha=0.35, label='Before quantization')
-plt.hist(meanlist2, bins='auto', alpha=0.35, label='After quantization')
-plt.hist(meanlist3, bins='auto', alpha=0.35, label='After quantization & sparse')
+plt.hist(meanlist1, bins='auto', alpha=0.3, label='Before quantization')
+plt.hist(meanlist2, bins='auto', alpha=0.3, label='After quantization')
+plt.hist(meanlist3, bins='auto', alpha=0.3, label='After quantization & sparse')
 plt.legend(loc='upper right')
 plt.xlabel('Time(ms)')
 plt.ylabel('Number of Image')
