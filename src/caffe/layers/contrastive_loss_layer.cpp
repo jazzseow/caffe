@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <vector>
+#include "caffe/util/io.hpp"
+#include <iostream>
 
 #include "caffe/layers/contrastive_loss_layer.hpp"
 #include "caffe/util/math_functions.hpp"
@@ -10,6 +12,7 @@ template <typename Dtype>
 void ContrastiveLossLayer<Dtype>::LayerSetUp(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
   LossLayer<Dtype>::LayerSetUp(bottom, top);
+	LOG(INFO) << "channel2: " << bottom[2]->channels() << std::endl;
   CHECK_EQ(bottom[0]->channels(), bottom[1]->channels());
   CHECK_EQ(bottom[0]->height(), 1);
   CHECK_EQ(bottom[0]->width(), 1);
@@ -25,6 +28,7 @@ void ContrastiveLossLayer<Dtype>::LayerSetUp(
   summer_vec_.Reshape(bottom[0]->channels(), 1, 1, 1);
   for (int i = 0; i < bottom[0]->channels(); ++i)
     summer_vec_.mutable_cpu_data()[i] = Dtype(1);
+
 }
 
 template <typename Dtype>
@@ -41,6 +45,8 @@ void ContrastiveLossLayer<Dtype>::Forward_cpu(
   Dtype margin = this->layer_param_.contrastive_loss_param().margin();
   bool legacy_version =
       this->layer_param_.contrastive_loss_param().legacy_version();
+	// bool deploy_stage =
+  //     this->layer_param_.contrastive_loss_param().deploy_stage();
   Dtype loss(0.0);
   for (int i = 0; i < bottom[0]->num(); ++i) {
     dist_sq_.mutable_cpu_data()[i] = caffe_cpu_dot(channels,
@@ -57,8 +63,24 @@ void ContrastiveLossLayer<Dtype>::Forward_cpu(
       }
     }
   }
-  loss = loss / static_cast<Dtype>(bottom[0]->num()) / Dtype(2);
-  top[0]->mutable_cpu_data()[0] = loss;
+  // loss = loss / static_cast<Dtype>(bottom[0]->num()) / Dtype(2);
+  // top[0]->mutable_cpu_data()[0] = loss;
+  //
+	// if (top.size() == 2){
+	// 	Dtype similarity(0.0);
+	// 	if (bottom[0]->num() == 1){
+	// 		similarity = sqrt(dist_sq_.cpu_data()[0]);
+  //
+	// 		if (similarity < 0){
+	// 			similarity = 0;
+	// 		}
+  //
+	// 		similarity = similarity * similarity;
+	// 	}
+	// 	top[1]->mutable_cpu_data()[0] = similarity;
+	// }
+	loss = loss / static_cast<Dtype>(bottom[0]->num()) / Dtype(2);
+	top[0]->mutable_cpu_data()[0] = loss;
 }
 
 template <typename Dtype>

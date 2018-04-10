@@ -1,6 +1,6 @@
 cur_dir=$(cd $( dirname ${BASH_SOURCE[0]} ) && pwd )
 root_dir=$cur_dir/../..
-HOME=/home/jazz/ssd
+HOME=/home/ctg-sa/jazz_ws/caffe
 cd $root_dir
 
 redo=1

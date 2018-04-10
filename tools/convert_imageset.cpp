@@ -138,6 +138,7 @@ int main(int argc, char** argv) {
     // Put in db
     string out;
     CHECK(datum.SerializeToString(&out));
+		LOG(INFO) << out;
     txn->Put(key_str, out);
 
     if (++count % 1000 == 0) {

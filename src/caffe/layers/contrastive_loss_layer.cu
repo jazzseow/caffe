@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <vector>
-
+// #include <chrono>
 #include "caffe/layers/contrastive_loss_layer.hpp"
 #include "caffe/util/math_functions.hpp"
 
@@ -10,6 +10,9 @@ template <typename Dtype>
 void ContrastiveLossLayer<Dtype>::Forward_gpu(
     const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
   const int count = bottom[0]->count();
+	// std::vector<float> same;
+	// std::vector<float> diff;
+	// auto start = std::chrono::steady_clock::now();
   caffe_gpu_sub(
       count,
       bottom[0]->gpu_data(),  // a
@@ -32,10 +35,14 @@ void ContrastiveLossLayer<Dtype>::Forward_gpu(
   Dtype margin = this->layer_param_.contrastive_loss_param().margin();
   bool legacy_version =
       this->layer_param_.contrastive_loss_param().legacy_version();
+	bool deploy_stage =
+      this->layer_param_.contrastive_loss_param().deploy_stage();
   Dtype loss(0.0);
   for (int i = 0; i < bottom[0]->num(); ++i) {
     if (static_cast<int>(bottom[2]->cpu_data()[i])) {  // similar pairs
       loss += dist_sq_.cpu_data()[i];
+			// LOG(INFO) << "same: " << (float)dist_sq_.cpu_data()[i] << std::endl;
+			// same.push_back((float)dist_sq_.cpu_data()[i]);
     } else {  // dissimilar pairs
       if (legacy_version) {
         loss += std::max(margin - dist_sq_.cpu_data()[i], Dtype(0.0));
@@ -46,8 +53,25 @@ void ContrastiveLossLayer<Dtype>::Forward_gpu(
       }
     }
   }
+
   loss = loss / static_cast<Dtype>(bottom[0]->num()) / Dtype(2);
-  top[0]->mutable_cpu_data()[0] = loss;
+	// LOG(INFO) << "loss: " << loss << std::endl;
+	if (deploy_stage){
+		Dtype *top_data;
+		vector<int> top_shape(1, 2);
+		top[0]->Reshape(top_shape);
+    top_data = top[0]->mutable_cpu_data();
+		top_data[0] = loss;
+		top_data[1] = sqrt(loss);
+	}
+	else{
+		top[0]->mutable_cpu_data()[0] = loss;
+	}
+
+	// LOG(INFO) << this->layer_param_.name() << ": " <<
+	// std::chrono::duration_cast<std::chrono::milliseconds>
+  //                           (std::chrono::steady_clock::now() - start).count()
+						// << " ms";
 }
 
 template <typename Dtype>
@@ -82,6 +106,7 @@ __global__ void CLLBackward(const int count, const int channels,
 template <typename Dtype>
 void ContrastiveLossLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+	// LOG(INFO) << "Backward_gpu: " << std::endl;
   for (int i = 0; i < 2; ++i) {
     if (propagate_down[i]) {
       const int count = bottom[0]->count();

@@ -9,7 +9,7 @@ using namespace caffe;
 using namespace std;
 using namespace cv;
 
-float CONF_THRESH = 0.6;
+float CONF_THRESH = 0.2;
 class Detector {
 	public:
 		Detector(const string& model_file, const string& weights_file);
@@ -57,13 +57,12 @@ void Detector::Detect(string im_name){
 	// 	}
 	// }
 	// LOG(INFO);
-	imshow( "Display window", origImg);
-  imshow( "Display window2", copyImg);                   // Show our image inside it.
 
 	cv::FileStorage fs("/home/jazz/SSD/caffe/demo_cpp.xml", cv::FileStorage::WRITE);
 	fs << "copyImg" << copyImg;
 	fs.release();
-  waitKey(0);
+	waitKey(0);
+
 	LOG(INFO);
 	int height = 300;
 	int width = 300;
@@ -134,11 +133,11 @@ void Detector::vis_detections(cv::Mat image, vector<vector<float> > detections, 
 
 int main()
 {
-	string model_file = "/home/jazz/SSD/caffe/examples/MobileNet-SSD/MobileNetSSD_deploy.prototxt";
-	string weights_file = "/home/jazz/SSD/caffe/examples/MobileNet-SSD/MobileNetSSD_deploy.caffemodel";
+	string model_file = "examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.prototxt";
+	string weights_file = "examples/MobileNet-SSD/model_quantized/MobileNetSSD_quantized_deploy.caffemodel";
 
-	// Caffe::set_mode(Caffe::GPU);
-	Caffe::set_mode(Caffe::CPU);
+	Caffe::set_mode(Caffe::GPU);
+	// Caffe::set_mode(Caffe::CPU);
 	Detector det = Detector(model_file, weights_file);
 	string im_names="examples/MobileNet-SSD/images/horse.jpg";
 	// clock_t t1 = clock();

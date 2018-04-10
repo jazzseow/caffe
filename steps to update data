@@ -1,0 +1,30 @@
+set06-10 -> 2007
+set00-05 -> 2012
+create annotations
+copy img named from 010000 for 2007
+copy img named from 2012_005000
+
+modify 2007 person_test and test.txt
+modify 2012 person_train person_trainval person_val
+
+<annotation>
+	<folder>VOC2007</folder>
+	<filename>000001.jpg</filename>
+	<size>
+		<width>353</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<object>
+		<name>person</name>
+		<pose>Left</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>8</xmin>
+			<ymin>12</ymin>
+			<xmax>352</xmax>
+			<ymax>498</ymax>
+		</bndbox>
+	</object>
+</annotation>

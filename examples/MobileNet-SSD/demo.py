@@ -1,20 +1,18 @@
-import numpy as np  
-import sys,os  
+import numpy as np
+import sys,os
 import cv2
-caffe_root = '/home/yaochuanqi/ssd/caffe/'
-sys.path.insert(0, caffe_root + 'python')  
-import caffe  
+import caffe
 
 
-net_file= 'MobileNetSSD_deploy.prototxt'  
-caffe_model='MobileNetSSD_deploy.caffemodel'  
-test_dir = "images"
+net_file= 'model_quantized/MobileNetSSD_quantized_deploy.prototxt'
+caffe_model='model_quantized/MobileNetSSD_quantized_deploy.caffemodel'
+test_dir = "/home/ctg-sa/jazz_ws/mot/dataset/MOT16/train/MOT16-04/img1"
 
 if not os.path.exists(caffe_model):
     print("MobileNetSSD_deploy.affemodel does not exist,")
     print("use merge_bn.py to generate it.")
     exit()
-net = caffe.Net(net_file,caffe_model,caffe.TEST)  
+net = caffe.Net(net_file,caffe_model,caffe.TEST)
 
 CLASSES = ('background',
            'aeroplane', 'bicycle', 'bird', 'boat',
@@ -30,39 +28,45 @@ def preprocess(src):
     img = img * 0.007843
     return img
 
-def postprocess(img, out):   
-    h = img.shape[0]
-    w = img.shape[1]
-    box = out['detection_out'][0,0,:,3:7] * np.array([w, h, w, h])
+def postprocess(img, out):
+	h = img.shape[0]
+	w = img.shape[1]
+	print out['detection_out'].shape
+	box = out['detection_out'][0,0,:,3:7] * np.array([w, h, w, h])
 
-    cls = out['detection_out'][0,0,:,1]
-    conf = out['detection_out'][0,0,:,2]
-    return (box.astype(np.int32), conf, cls)
+	cls = out['detection_out'][0,0,:,1]
+	conf = out['detection_out'][0,0,:,2]
+	return (box.astype(np.int32), conf, cls)
 
 def detect(imgfile):
-    origimg = cv2.imread(imgfile)
-    img = preprocess(origimg)
-    
-    img = img.astype(np.float32)
-    img = img.transpose((2, 0, 1))
+	origimg = cv2.imread(imgfile)
+	img = preprocess(origimg)
 
-    net.blobs['data'].data[...] = img
-    out = net.forward()  
-    box, conf, cls = postprocess(origimg, out)
+	img = img.astype(np.float32)
+	img = img.transpose((2, 0, 1))
 
-    for i in range(len(box)):
-       p1 = (box[i][0], box[i][1])
-       p2 = (box[i][2], box[i][3])
-       cv2.rectangle(origimg, p1, p2, (0,255,0))
-       p3 = (max(p1[0], 15), max(p1[1], 15))
-       title = "%s:%.2f" % (CLASSES[int(cls[i])], conf[i])
-       cv2.putText(origimg, title, p3, cv2.FONT_ITALIC, 0.6, (0, 255, 0), 1)
-    cv2.imshow("SSD", origimg)
- 
-    k = cv2.waitKey(0) & 0xff
-        #Exit if ESC pressed
-    if k == 27 : return False
-    return True
+	# print img.shape (3, 300, 300)
+
+	net.blobs['data'].data[...] = img
+	out = net.forward()
+	box, conf, cls = postprocess(origimg, out)
+
+	print imgfile
+	for i in range(len(box)):
+		p1 = (box[i][0], box[i][1])
+		p2 = (box[i][2], box[i][3])
+		cv2.rectangle(origimg, p1, p2, (0,255,0))
+		p3 = (max(p1[0], 15), max(p1[1], 15))
+		title = "%s:%.2f" % (CLASSES[int(cls[i])], conf[i])
+		print title
+		cv2.putText(origimg, title, p3, cv2.FONT_ITALIC, 0.6, (0, 255, 0), 1)
+	cv2.imshow("SSD", origimg)
+	print '\n'
+
+	# k = cv2.waitKey(0) & 0xff
+	# #Exit if ESC pressed
+	# if k == 27 : return False
+	return True
 
 for f in os.listdir(test_dir):
     if detect(test_dir + "/" + f) == False:

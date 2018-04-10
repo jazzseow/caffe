@@ -1,0 +1,1 @@
+/home/ctg-sa/jazz_ws/caffe/examples/pedestrian_siamese/descriptor/descriptor_single.prototxt

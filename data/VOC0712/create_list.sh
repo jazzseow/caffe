@@ -1,8 +1,9 @@
 #!/bin/bash
-HOME=/home/jazz/ssd
+HOME=/home/ctg-sa/jazz_ws/caffe
 root_dir=$HOME/data/VOCdevkit/
 sub_dir=ImageSets/Main
 bash_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo $bash_dir
 for dataset in trainval test
 do
   dst_file=$bash_dir/$dataset.txt
@@ -20,11 +21,13 @@ do
     dataset_file=$root_dir/$name/$sub_dir/$dataset.txt
 
     img_file=$bash_dir/$dataset"_img.txt"
+		echo $img_file
     cp $dataset_file $img_file
     sed -i "s/^/$name\/JPEGImages\//g" $img_file
     sed -i "s/$/.jpg/g" $img_file
 
     label_file=$bash_dir/$dataset"_label.txt"
+		echo $label_file
     cp $dataset_file $label_file
     sed -i "s/^/$name\/Annotations\//g" $label_file
     sed -i "s/$/.xml/g" $label_file

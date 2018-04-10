@@ -5,5 +5,5 @@
 # 	exit 1
 # fi
 build/tools/caffe train -solver="examples/MobileNet-SSD/solver_test.prototxt" \
---weights=$latest \
--gpu 0,1,2,3
+--weights="/home/ctg-sa/jazz_ws/caffe/examples/MobileNet-SSD/mobilenet_iter_73000.caffemodel" \
+-gpu 0

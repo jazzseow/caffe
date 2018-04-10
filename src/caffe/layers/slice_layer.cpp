@@ -41,6 +41,8 @@ void SliceLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
   int count = 0;
   if (slice_point_.size() != 0) {
     CHECK_EQ(slice_point_.size(), top.size() - 1);
+		// LOG(INFO) << "top size: " << top.size() << std::endl;
+		// LOG(INFO) << "bot slice axis: " << bottom_slice_axis << std::endl;
     CHECK_LE(top.size(), bottom_slice_axis);
     int prev = 0;
     vector<int> slices;
